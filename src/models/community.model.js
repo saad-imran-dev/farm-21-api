@@ -13,7 +13,6 @@ const Community = sequelize.define(table_name, {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
     },
     desc: {
         type: DataTypes.STRING,

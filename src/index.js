@@ -19,7 +19,7 @@ fs.readdir("./src/routes", (err, files) => {
     }
 
     files.forEach(file => {
-        app.use(require(`./routes/${file}`))
+        app.use("/api", require(`./routes/${file}`))
         console.log(`Succesfully loaded route ${file}`)
     });
 
