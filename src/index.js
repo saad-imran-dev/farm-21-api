@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
-const database = require("./data/database");
+const database = require("./data/Database");
 
 const app = express();
 const port = process.env.PORT;

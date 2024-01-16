@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const signup = Joi.object({
+const auth = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/).required()
 })
@@ -12,7 +12,7 @@ const verifyOTP = Joi.object({
 })
 
 const userValidation = {
-    signup,
+    auth,
     verifyOTP,
 }
 
