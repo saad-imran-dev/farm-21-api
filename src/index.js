@@ -27,7 +27,7 @@ fs.readdir("./src/routes", (err, files) => {
 })
 
 // Sync Db & Models
-database.sync()
+// database.sync()
 
 // listening
 app.listen(port, () => {

@@ -148,6 +148,7 @@ class Database {
   }
 
   async sync() {
+    console.log(`--> Syncing database...`);
     await sequelize.sync({ alter: true });
     console.log(`--> Database and Models synced`);
   }

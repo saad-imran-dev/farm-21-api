@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const supabase = require("../config/supabase");
+const { AuthApiError } = require("@supabase/supabase-js");
 
 class Authentication {
   constructor() {
@@ -18,8 +19,7 @@ class Authentication {
     });
 
     if (error) {
-      console.log("Error while Signing in user: ", error);
-      throw new Error("SignIn Error");
+      throw error;
     }
 
     return data;
@@ -49,17 +49,21 @@ class Authentication {
   }
 
   async createUserToken(user) {
-    const key = process.env.JWT_SECRET_KEY;
-
     const data = {
       time: Date(),
       userId: user.id,
       isExpert: user.isExpert,
     };
 
-    const token = jwt.sign(data, key);
+    const token = jwt.sign(data, process.env.JWT_SECRET_KEY);
 
     return token;
+  }
+
+  async verifyUserToken(token) {
+    const jwtToken = await jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+    return jwtToken;
   }
 }
 

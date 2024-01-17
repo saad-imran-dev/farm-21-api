@@ -1,4 +1,4 @@
-const authentication = require("../utils/Authentication");
+const authentication = require("../supabase/Authentication");
 const userValidation = require("../validation/user.validation");
 const userRepo = require("../data/user.repo");
 const { ValidationError } = require("joi");
@@ -13,20 +13,19 @@ class userController {
 
       await userValidation.auth.validateAsync(req.body);
 
-      if (!(await userRepo.getUserWithEmail(email))) {
-        return res.status(400).send("User Does not exist");
-      }
-
+      
       const auth = await authentication.signin(email, password);
 
       const user = await userRepo.getUserWithEmail(auth.user.email);
-
+      
       const token = await authentication.createUserToken(user);
 
       res.status(200).send({ token });
     } catch (error) {
       if (error instanceof ValidationError) {
         res.status(400).send("Invalid inputs given");
+      } else if (error instanceof AuthApiError) {
+        res.status(400).send(error.message);
       } else {
         res.sendStatus(500);
       }

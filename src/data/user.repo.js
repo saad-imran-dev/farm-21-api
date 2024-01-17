@@ -11,7 +11,7 @@ class UserRepo {
                 email: email
             }
         })
-        console.log(user)
+        
         return user[0]
     }
 
