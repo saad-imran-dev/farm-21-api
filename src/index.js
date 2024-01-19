@@ -19,7 +19,7 @@ const options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Hello World",
+      title: "Farm 21",
       version: "1.0.0",
     },
     components: {
