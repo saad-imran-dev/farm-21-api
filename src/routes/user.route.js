@@ -83,7 +83,7 @@ router.post("/user/signin", userController.signin);
  * @swagger
  * /api/user/verify:
  *   post:
- *     summary: Verify a user
+ *     summary: Verify a user after signup with email OTP code
  *     tags: [User]
  *     requestBody:
  *       description: User verification data
