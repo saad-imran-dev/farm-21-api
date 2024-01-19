@@ -53,7 +53,7 @@ class communityController {
       await communityValidation.update.validateAsync(req.body);
 
       await communityRepo.updateCommunity(id, desc);
-      
+
       res.sendStatus(200);
     } catch (error) {
       if (error instanceof ValidationError) {
@@ -72,6 +72,47 @@ class communityController {
       const { id } = req.params;
 
       await communityRepo.deleteCommunity(id);
+
+      res.sendStatus(200);
+    } catch (error) {
+      res.sendStatus(500);
+      console.error(`Error: ${error.message}`);
+    }
+  }
+
+  static async joinCommunity(req, res) {
+    console.info("--> Join Community");
+
+    try {
+      const { id } = req.params;
+
+      if (!(await communityRepo.getCommunityWithId(id))) {
+        return res.status(404).send("Community Not Found");
+      }
+
+      if (!(await communityRepo.isCommunityJoined(req.uid, id))) {
+        await communityRepo.joinCommunity(req.uid, id);
+      }
+
+      res.sendStatus(200);
+    } catch (error) {
+      res.sendStatus(500);
+      console.error(`Error: ${error.message}`);
+      console.log(error);
+    }
+  }
+
+  static async leaveCommunity(req, res) {
+    console.info("--> Leave Community");
+
+    try {
+      const { id } = req.params;
+
+      if (!(await communityRepo.getCommunityWithId(id))) {
+        return res.status(404).send("Community Not Found");
+      }
+
+      await communityRepo.leaveCommunity(req.uid, id);
 
       res.sendStatus(200);
     } catch (error) {

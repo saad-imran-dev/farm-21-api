@@ -124,4 +124,68 @@ router.patch("/community/:id", verifyToken, communityController.updateCommunity)
  */
 router.delete("/community/:id", verifyToken, communityController.deleteCommunity);
 
+/**
+ * @swagger
+ * /api/community/join/{id}:
+ *   post:
+ *     summary: Join a Community
+ *     tags: [Community]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the community to delete
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       description: Community data
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       '200':
+ *         description: Joinned Community successfully
+ *       '401':
+ *         description: Unauthorized
+ *       '500':
+ *         description: Internal Server Error
+ */
+router.post("/community/join/:id", verifyToken, communityController.joinCommunity);
+
+/**
+ * @swagger
+ * /api/community/leave/{id}:
+ *   post:
+ *     summary: leave Community
+ *     tags: [Community]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the community to delete
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       description: Community data
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       '200':
+ *         description: left Community successfully
+ *       '401':
+ *         description: Unauthorized
+ *       '500':
+ *         description: Internal Server Error
+ */
+router.post("/community/leave/:id", verifyToken, communityController.leaveCommunity);
+
 module.exports = router

@@ -13,11 +13,10 @@ class userController {
 
       await userValidation.auth.validateAsync(req.body);
 
-      
       const auth = await authentication.signin(email, password);
 
       const user = await userRepo.getUserWithEmail(auth.user.email);
-      
+
       const token = await authentication.createUserToken(user);
 
       res.status(200).send({ token });
@@ -82,6 +81,19 @@ class userController {
       } else {
         res.sendStatus(500);
       }
+      console.error(`Error: ${error}`);
+    }
+  }
+
+  static async getUserCommunities(req, res) {
+    console.info("--> GET User Communities");
+
+    try {
+      const communities = await userRepo.getUserCommunities(req.uid);
+
+      res.status(200).send({ communities });
+    } catch (error) {
+      res.sendStatus(500);
       console.error(`Error: ${error}`);
     }
   }

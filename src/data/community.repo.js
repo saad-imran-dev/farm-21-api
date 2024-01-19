@@ -29,6 +29,16 @@ class CommunityRepo {
     return communities;
   }
 
+  async getCommunityWithId(id) {
+    const community = this.db.communities.findAll({
+      where: {
+        id: id,
+      },
+    });
+
+    return community;
+  }
+
   async updateCommunity(id, desc) {
     const community = await this.db.communities.update(
       {
@@ -50,6 +60,37 @@ class CommunityRepo {
         id: id,
       },
     });
+  }
+
+  async joinCommunity(userId, communityId) {
+    await this.db.user_joined_communities.create({
+      userId,
+      communityId,
+    });
+  }
+
+  async leaveCommunity(userId, communityId) {
+    await this.db.user_joined_communities.destroy({
+      where: {
+        userId,
+        communityId,
+      },
+    });
+  }
+
+  async isCommunityJoined(userId, communityId) {
+    const communities = await this.db.user_joined_communities.findAll({
+      where: {
+        userId,
+        communityId,
+      },
+    });
+
+    if (communities.length > 0) {
+      return true;
+    }
+
+    return false;
   }
 }
 

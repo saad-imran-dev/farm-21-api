@@ -105,21 +105,21 @@ class Database {
     // likes M:N relation btw users & posts
     this.db.users.belongsToMany(this.db.posts, {
       as: "likes",
-      through: "post_liked_by_user",
+      through: this.db.post_liked_by_user,
     });
     this.db.posts.belongsToMany(this.db.users, {
       as: "likes",
-      through: "post_liked_by_user",
+      through: this.db.post_liked_by_user,
     });
 
     // joined communities M:N relation btw users & communities
     this.db.users.belongsToMany(this.db.communities, {
       as: "joined_communites",
-      through: "user_joined_communities",
+      through: this.db.user_joined_communities,
     });
     this.db.communities.belongsToMany(this.db.users, {
       as: "joined_communites",
-      through: "user_joined_communities",
+      through: this.db.user_joined_communities,
     });
 
     // comment votes M:N relation btw comments & users

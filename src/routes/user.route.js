@@ -1,7 +1,8 @@
 const express = require("express");
 const userController = require("../controllers/user.controller");
+const verifyToken = require("../middleware/verifyToken");
 
-const router = express.Router()
+const router = express.Router();
 
 /**
  * @swagger
@@ -113,5 +114,20 @@ router.post("/user/signin", userController.signin);
  */
 router.post("/user/verify", userController.verify);
 
+/**
+ * @swagger
+ * /api/user/community/:
+ *   get:
+ *     summary: Get a list of communities joined by user 
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved communities
+ *       '500':
+ *         description: Internal Server Error
+ */
+router.get("/user/community", verifyToken, userController.getUserCommunities);
 
-module.exports = router
+module.exports = router;
