@@ -14,7 +14,7 @@ const verifyToken = async (req, res, next) => {
     next();
   } catch (error) {
     if (error instanceof JsonWebTokenError) {
-      return res.status(403).send("Invalid token");
+      return res.status(401).send("Unauthorized");
     }
     res.sendStatus(500);
   }
