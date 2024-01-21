@@ -25,4 +25,8 @@ router.get("/test/", verifyToken, async (req, res) => {
     res.status(200).send("API working.")
 })
 
+router.post("/test/storage", verifyToken, async (req, res) => {
+    res.status(200).send("File saved")
+})
+
 module.exports = router
