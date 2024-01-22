@@ -11,7 +11,7 @@ class Storage {
     return Storage.instance;
   }
 
-  async uploadTestFile(fileName, file) {
+  async uploadFile(fileName, file) {
     const { data, error } = await this.storage
       .from(process.env.STORAGE_BUCKET)
       .upload(fileName, file, { upsert: true });
@@ -23,7 +23,7 @@ class Storage {
     return data;
   }
 
-  async deleteTestFile(fileName) {
+  async deleteFile(fileName) {
     const { data, error } = await this.storage
       .from(process.env.STORAGE_BUCKET)
       .remove(fileName);

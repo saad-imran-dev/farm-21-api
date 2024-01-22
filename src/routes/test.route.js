@@ -67,7 +67,7 @@ router.post(
         const id = v4();
         const fileName = id + file.originalname;
 
-        await storage.uploadTestFile(fileName, file.buffer);
+        await storage.uploadFile(fileName, file.buffer);
         await attachmentRepo.createTestAttachment(id, fileName, transaction);
       }
 
@@ -151,7 +151,7 @@ router.put(
       await attachmentRepo.deleteTestAttachment(transaction);
 
       for (const file of files) {
-        storage.deleteTestFile(file.fileName);
+        storage.deleteFile(file.fileName);
       }
 
       // Upload new files
@@ -159,7 +159,7 @@ router.put(
         const id = v4();
         const fileName = Date.now() + "-" + file.originalname;
 
-        await storage.uploadTestFile(fileName, file.buffer);
+        await storage.uploadFile(fileName, file.buffer);
         await attachmentRepo.createTestAttachment(id, fileName, transaction);
       }
 
@@ -193,7 +193,7 @@ router.delete("/test/storage", verifyToken, async (req, res) => {
     await attachmentRepo.deleteTestAttachment();
 
     for (const file of files) {
-      storage.deleteTestFile(file.fileName);
+      storage.deleteFile(file.fileName);
     }
 
     res.status(200).send("Files deleted");
