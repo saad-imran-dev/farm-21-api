@@ -46,9 +46,25 @@ class Database {
       onUpdate: "CASCADE",
     });
 
+    // User Attachment relation
+    this.db.users.hasMany(this.db.attachments, {
+      as: "user_attachments",
+      foreignKey: "userId",
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
+    });
+
     // Community Posts relation
     this.db.communities.hasMany(this.db.posts, {
       as: "community_posts",
+      foreignKey: "communityId",
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
+    });
+
+    // Community Attachment relation
+    this.db.communities.hasMany(this.db.attachments, {
+      as: "community_attachments",
       foreignKey: "communityId",
       onDelete: "CASCADE",
       onUpdate: "CASCADE",
@@ -145,6 +161,10 @@ class Database {
 
   getDatabase() {
     return this.db;
+  }
+
+  async getTransaction() {
+    return await sequelize.transaction();
   }
 
   async sync() {

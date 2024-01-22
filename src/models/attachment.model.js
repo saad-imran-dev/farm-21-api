@@ -10,7 +10,7 @@ const Attachment = sequelize.define(table_name, {
         allowNull: false,
         primaryKey: true,
     },
-    url: {
+    fileName: {
         type: DataTypes.TEXT,
         allowNull: false,
     },
