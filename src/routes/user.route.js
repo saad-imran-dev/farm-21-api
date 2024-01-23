@@ -4,6 +4,16 @@ const verifyToken = require("../middleware/verifyToken");
 
 const router = express.Router();
 
+router.post("/user/signup", userController.signup);
+
+router.post("/user/signin", userController.signin);
+
+router.post("/user/verify", userController.verify);
+
+router.get("/user/community", verifyToken, userController.getUserCommunities);
+
+module.exports = router;
+
 /**
  * @swagger
  * tags:
@@ -40,7 +50,6 @@ const router = express.Router();
  *       '500':
  *         description: Internal Server Error
  */
-router.post("/user/signup", userController.signup);
 
 /**
  * @swagger
@@ -78,7 +87,6 @@ router.post("/user/signup", userController.signup);
  *       '500':
  *         description: Internal Server Error
  */
-router.post("/user/signin", userController.signin);
 
 /**
  * @swagger
@@ -112,7 +120,6 @@ router.post("/user/signin", userController.signin);
  *       '500':
  *         description: Internal Server Error
  */
-router.post("/user/verify", userController.verify);
 
 /**
  * @swagger
@@ -128,6 +135,3 @@ router.post("/user/verify", userController.verify);
  *       '500':
  *         description: Internal Server Error
  */
-router.get("/user/community", verifyToken, userController.getUserCommunities);
-
-module.exports = router;

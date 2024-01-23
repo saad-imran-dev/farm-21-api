@@ -4,6 +4,20 @@ const communityController = require("../controllers/community.controller");
 
 const router = express.Router()
 
+router.post("/community/", verifyToken, communityController.createCommunity);
+
+router.get("/community/", verifyToken, communityController.getCommunities);
+
+router.patch("/community/:id", verifyToken, communityController.updateCommunity);
+
+router.delete("/community/:id", verifyToken, communityController.deleteCommunity);
+
+router.post("/community/join/:id", verifyToken, communityController.joinCommunity);
+
+router.post("/community/leave/:id", verifyToken, communityController.leaveCommunity);
+
+module.exports = router
+
 /**
  * @swagger
  * tags:
@@ -42,7 +56,6 @@ const router = express.Router()
  *       '500':
  *         description: Internal Server Error
  */
-router.post("/community/", verifyToken, communityController.createCommunity);
 
 /**
  * @swagger
@@ -60,7 +73,6 @@ router.post("/community/", verifyToken, communityController.createCommunity);
  *       '500':
  *         description: Internal Server Error
  */
-router.get("/community/", verifyToken, communityController.getCommunities);
 
 /**
  * @swagger
@@ -97,7 +109,6 @@ router.get("/community/", verifyToken, communityController.getCommunities);
  *       '500':
  *         description: Internal Server Error
  */
-router.patch("/community/:id", verifyToken, communityController.updateCommunity);
 
 /**
  * @swagger
@@ -122,7 +133,6 @@ router.patch("/community/:id", verifyToken, communityController.updateCommunity)
  *       '500':
  *         description: Internal Server Error
  */
-router.delete("/community/:id", verifyToken, communityController.deleteCommunity);
 
 /**
  * @swagger
@@ -154,7 +164,6 @@ router.delete("/community/:id", verifyToken, communityController.deleteCommunity
  *       '500':
  *         description: Internal Server Error
  */
-router.post("/community/join/:id", verifyToken, communityController.joinCommunity);
 
 /**
  * @swagger
@@ -186,6 +195,3 @@ router.post("/community/join/:id", verifyToken, communityController.joinCommunit
  *       '500':
  *         description: Internal Server Error
  */
-router.post("/community/leave/:id", verifyToken, communityController.leaveCommunity);
-
-module.exports = router
