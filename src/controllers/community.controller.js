@@ -88,6 +88,18 @@ class communityController {
     }
   }
 
+  static async communityProfile(req, res){
+    console.info("--> Upload Community Profile pic");
+
+    try {
+      res.sendStatus(200);
+    } catch (error) {
+      res.sendStatus(500);
+      console.error(`Error: ${error.message}`);
+      console.log(error);
+    }
+  }
+
   static async joinCommunity(req, res) {
     console.info("--> Join Community");
 

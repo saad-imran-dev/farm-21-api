@@ -1,6 +1,7 @@
 const express = require("express");
 const verifyToken = require("../middleware/verifyToken");
 const communityController = require("../controllers/community.controller");
+const uploadAttachments = require("../middleware/uploadAttachments")
 
 const router = express.Router()
 
@@ -11,6 +12,8 @@ router.get("/community/", verifyToken, communityController.getCommunities);
 router.patch("/community/:id", verifyToken, communityController.updateCommunity);
 
 router.delete("/community/:id", verifyToken, communityController.deleteCommunity);
+
+router.post("/community/profile/:id", verifyToken, uploadAttachments, communityController.communityProfile)
 
 router.post("/community/join/:id", verifyToken, communityController.joinCommunity);
 

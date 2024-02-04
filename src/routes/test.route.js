@@ -1,6 +1,6 @@
 const express = require("express");
 const verifyToken = require("../middleware/verifyToken");
-const uploadAttachments = require("../middleware/uploadFile");
+const uploadAttachments = require("../middleware/uploadAttachments");
 const { v4 } = require("uuid");
 const storage = require("../supabase/Storage");
 const attachmentRepo = require("../data/attachment.repo");
