@@ -1,6 +1,8 @@
 const { ValidationError } = require("joi");
 const communityRepo = require("../data/community.repo");
 const communityValidation = require("../validation/community.validation");
+const storage = require("../supabase/Storage");
+const { v4 } = require("uuid")
 
 class communityController {
   static async createCommunity(req, res) {
@@ -37,6 +39,25 @@ class communityController {
       const communities = await communityRepo.getCommunity();
 
       res.status(200).send({ community: communities });
+    } catch (error) {
+      res.sendStatus(500);
+      console.error(`Error: ${error.message}`);
+    }
+  }
+
+  static async getCommunity(req, res) {
+    console.info("--> GET Community");
+
+    try {
+      const { id } = req.params
+
+      const community = await communityRepo.getCommunityWithId(id);
+
+      const profile = await communityRepo.getProfile(id)
+
+      const url = await (await storage.getUrl(profile.fileName))
+
+      res.status(200).send({ ...community.dataValues, profile: url.publicUrl });
     } catch (error) {
       res.sendStatus(500);
       console.error(`Error: ${error.message}`);
@@ -88,7 +109,7 @@ class communityController {
     }
   }
 
-  static async communityProfile(req, res){
+  static async communityProfile(req, res) {
     console.info("--> Upload Community Profile pic");
 
     try {
@@ -97,7 +118,15 @@ class communityController {
       if (!(await communityRepo.isCommunityMod(id, req.uid))) {
         return res.sendStatus(401);
       }
-      
+
+      console.log(req)
+
+      const fileId = v4()
+      const fileName = fileId + req.file.originalname
+      await storage.uploadFile(fileName, req.file.buffer);
+
+      await communityRepo.addProfile(fileId, fileName, id)
+
       res.sendStatus(200);
     } catch (error) {
       res.sendStatus(500);

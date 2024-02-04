@@ -23,7 +23,7 @@ class CommunityRepo {
       },
       attributes: ["id", "name", "desc", "createdAt"]
     });
-    
+
     return communities;
   }
 
@@ -38,10 +38,15 @@ class CommunityRepo {
   }
 
   async getCommunityWithId(id) {
-    const community = await this.db.communities.findAll({
+    const community = await this.db.communities.findOne({
       where: {
-        id: id,
+        id: id
       },
+      include: {
+        association: "community_moderator",
+        attributes: ["name", "email"]
+      },
+      attributes: ["id", "name", "desc", "createdAt"]
     });
 
     return community;
@@ -116,6 +121,24 @@ class CommunityRepo {
     } else {
       return false
     }
+  }
+
+  async addProfile(id, fileName, communityId) {
+    await this.db.attachments.create({
+      id,
+      fileName,
+      communityId
+    })
+  }
+
+  async getProfile(communityId) {
+    const attachment = this.db.attachments.findOne({
+      where: {
+        communityId
+      }
+    })
+
+    return attachment
   }
 }
 

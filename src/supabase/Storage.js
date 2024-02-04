@@ -11,6 +11,14 @@ class Storage {
     return Storage.instance;
   }
 
+  async getUrl(fileName) {
+    const { data, error } = await this.storage
+      .from(process.env.STORAGE_BUCKET)
+      .getPublicUrl(fileName);
+
+    return data
+  }
+
   async uploadFile(fileName, file) {
     const { data, error } = await this.storage
       .from(process.env.STORAGE_BUCKET)

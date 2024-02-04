@@ -9,6 +9,8 @@ router.post("/community/", verifyToken, communityController.createCommunity);
 
 router.get("/community/", verifyToken, communityController.getCommunities);
 
+router.get("/community/:id", verifyToken, communityController.getCommunity);
+
 router.patch("/community/:id", verifyToken, communityController.updateCommunity);
 
 router.delete("/community/:id", verifyToken, communityController.deleteCommunity);
@@ -65,6 +67,23 @@ module.exports = router
  * /api/community/:
  *   get:
  *     summary: Get a list of communities
+ *     tags: [Community]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved communities
+ *       '401':
+ *         description: Unauthorized
+ *       '500':
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * /api/community/{id}:
+ *   get:
+ *     summary: Get community details
  *     tags: [Community]
  *     security:
  *       - bearerAuth: []
