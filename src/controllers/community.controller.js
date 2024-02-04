@@ -17,7 +17,7 @@ class communityController {
         return res.status(409).send("Community Already exists");
       }
 
-      const community = await communityRepo.createCommunity(name, desc);
+      const community = await communityRepo.createCommunity(name, desc, req.uid);
 
       res.status(201).send({ community });
     } catch (error) {
@@ -52,6 +52,10 @@ class communityController {
 
       await communityValidation.update.validateAsync(req.body);
 
+      if (!(await communityRepo.isCommunityMod(id, req.uid))) {
+        return res.sendStatus(401);
+      }
+
       await communityRepo.updateCommunity(id, desc);
 
       res.sendStatus(200);
@@ -70,6 +74,10 @@ class communityController {
 
     try {
       const { id } = req.params;
+
+      if (!(await communityRepo.isCommunityMod(id, req.uid))) {
+        return res.sendStatus(401);
+      }
 
       await communityRepo.deleteCommunity(id);
 

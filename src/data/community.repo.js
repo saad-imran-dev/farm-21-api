@@ -5,22 +5,30 @@ class CommunityRepo {
     this.db = database.getDatabase();
   }
 
-  async createCommunity(name, desc) {
+  async createCommunity(name, desc, userId) {
     const community = await this.db.communities.create({
       name: name,
       desc: desc,
+      userId: userId,
     });
 
     return community;
   }
 
   async getCommunity() {
-    const communities = this.db.communities.findAll();
+    const communities = await this.db.communities.findAll({
+      include: {
+        association: "community_moderator",
+        attributes: ["name", "email"]
+      },
+      attributes: ["id", "name", "desc", "createdAt"]
+    });
+    
     return communities;
   }
 
   async getCommunityWithName(name) {
-    const communities = this.db.communities.findAll({
+    const communities = await this.db.communities.findAll({
       where: {
         name: name,
       },
@@ -30,7 +38,7 @@ class CommunityRepo {
   }
 
   async getCommunityWithId(id) {
-    const community = this.db.communities.findAll({
+    const community = await this.db.communities.findAll({
       where: {
         id: id,
       },
@@ -91,6 +99,23 @@ class CommunityRepo {
     }
 
     return false;
+  }
+
+  async isCommunityMod(id, userId) {
+    const community = await this.db.communities.findOne({
+      where: {
+        id: id,
+      },
+      include: {
+        association: "community_moderator",
+      }
+    });
+
+    if (community?.community_moderator?.id === userId) {
+      return true
+    } else {
+      return false
+    }
   }
 }
 

@@ -54,6 +54,14 @@ class Database {
       onUpdate: "CASCADE",
     });
 
+    // User Community Moderator relation
+    this.db.users.hasMany(this.db.communities, {
+      as: "community_moderator",
+      foreignKey: "userId",
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
+    });
+
     // Community Posts relation
     this.db.communities.hasMany(this.db.posts, {
       as: "community_posts",
@@ -69,6 +77,9 @@ class Database {
       onDelete: "CASCADE",
       onUpdate: "CASCADE",
     });
+
+    // User Community Moderator relation
+    this.db.communities.belongsTo(this.db.users, { as: "community_moderator", foreignKey: "userId", });
 
     // Post Attachments relation
     this.db.posts.hasMany(this.db.attachments, {

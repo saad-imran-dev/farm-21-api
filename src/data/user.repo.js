@@ -34,7 +34,6 @@ class UserRepo {
         association: "joined_communites",
         attributes: ["id", "name"],
       },
-      logging: console.log, // Enable query logging
     });
 
     return user[0].joined_communites;
