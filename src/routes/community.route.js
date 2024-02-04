@@ -1,7 +1,7 @@
 const express = require("express");
 const verifyToken = require("../middleware/verifyToken");
 const communityController = require("../controllers/community.controller");
-const uploadAttachments = require("../middleware/uploadAttachments")
+const uploadProfile = require("../middleware/uploadProfile");
 
 const router = express.Router()
 
@@ -13,7 +13,7 @@ router.patch("/community/:id", verifyToken, communityController.updateCommunity)
 
 router.delete("/community/:id", verifyToken, communityController.deleteCommunity);
 
-router.post("/community/profile/:id", verifyToken, uploadAttachments, communityController.communityProfile)
+router.post("/community/profile/:id", verifyToken, uploadProfile, communityController.communityProfile)
 
 router.post("/community/join/:id", verifyToken, communityController.joinCommunity);
 
@@ -131,6 +131,30 @@ module.exports = router
  *     responses:
  *       '200':
  *         description: Community deleted successfully
+ *       '401':
+ *         description: Unauthorized
+ *       '500':
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * /api/community/profile/{id}:
+ *   post:
+ *     summary: Add a profile pic to community
+ *     tags: [Community]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the community to delete
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Community profile pic updated successfully
  *       '401':
  *         description: Unauthorized
  *       '500':

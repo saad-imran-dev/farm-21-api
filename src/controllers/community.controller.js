@@ -92,6 +92,12 @@ class communityController {
     console.info("--> Upload Community Profile pic");
 
     try {
+      const { id } = req.params;
+
+      if (!(await communityRepo.isCommunityMod(id, req.uid))) {
+        return res.sendStatus(401);
+      }
+      
       res.sendStatus(200);
     } catch (error) {
       res.sendStatus(500);
