@@ -128,6 +128,36 @@ module.exports = router;
 
 /**
  * @swagger
+ * /api/user/profile/:
+ *   get:
+ *     summary: Get the url for user profile pic 
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved communities
+ *       '500':
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * /api/user/profile/:
+ *   post:
+ *     summary: Add profile pic for user. Form data fieldname should be "Profile" 
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved communities
+ *       '500':
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
  * /api/user/community/:
  *   get:
  *     summary: Get a list of communities joined by user 
