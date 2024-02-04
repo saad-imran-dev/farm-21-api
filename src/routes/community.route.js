@@ -141,7 +141,7 @@ module.exports = router
  * @swagger
  * /api/community/profile/{id}:
  *   post:
- *     summary: Add a profile pic to community
+ *     summary: Add a profile pic to community. Form data fieldname should be "Profile"
  *     tags: [Community]
  *     security:
  *       - bearerAuth: []
