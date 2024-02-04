@@ -119,7 +119,12 @@ class communityController {
         return res.sendStatus(401);
       }
 
-      console.log(req)
+      const profile = await communityRepo.getProfile(id)
+      
+      if(profile){
+        storage.deleteFile(profile.dataValues.fileName)
+        communityRepo.deleteProfile(id)
+      }
 
       const fileId = v4()
       const fileName = fileId + req.file.originalname

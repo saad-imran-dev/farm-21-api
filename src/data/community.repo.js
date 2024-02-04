@@ -140,6 +140,14 @@ class CommunityRepo {
 
     return attachment
   }
+
+  async deleteProfile(communityId) {
+    await this.db.attachments.destroy({
+      where: {
+        communityId: communityId
+      }
+    })
+  }
 }
 
 const communityRepo = new CommunityRepo();
