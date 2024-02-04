@@ -3,6 +3,8 @@ const userValidation = require("../validation/user.validation");
 const userRepo = require("../data/user.repo");
 const { ValidationError } = require("joi");
 const { AuthApiError } = require("@supabase/supabase-js");
+const storage = require("../supabase/Storage");
+const { v4 } = require('uuid')
 
 class userController {
   static async signin(req, res) {
@@ -92,6 +94,49 @@ class userController {
       const communities = await userRepo.getUserCommunities(req.uid);
 
       res.status(200).send({ communities });
+    } catch (error) {
+      res.sendStatus(500);
+      console.error(`Error: ${error}`);
+    }
+  }
+
+  static async getUserProfile(req, res) {
+    console.info("--> GET User Profile");
+
+    try {
+      const profile = await userRepo.getProfile(req.uid)
+
+      const url = await storage.getUrl(profile?.fileName)
+
+      if (url.publicUrl.split('/').slice(-1)[0] === "undefined") {
+        return res.sendStatus(404)
+      }
+
+      res.status(200).send(url);
+    } catch (error) {
+      res.sendStatus(500);
+      console.error(`Error: ${error}`);
+    }
+  }
+
+  static async createUserProfile(req, res) {
+    console.info("--> Add User Profile");
+
+    try {
+      const profile = await userRepo.getProfile(req.uid)
+      
+      if (profile) {
+        await storage.deleteFile(profile.fileName)
+        await userRepo.deleteProfile(req.uid)
+      }
+      
+      const fileId = v4()
+      const fileName = fileId + req.file.originalname
+      await storage.uploadFile(fileName, req.file.buffer);
+
+      await userRepo.addProfile(fileId, fileName, req.uid)
+
+      res.sendStatus(200);
     } catch (error) {
       res.sendStatus(500);
       console.error(`Error: ${error}`);

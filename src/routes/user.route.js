@@ -1,6 +1,7 @@
 const express = require("express");
 const userController = require("../controllers/user.controller");
 const verifyToken = require("../middleware/verifyToken");
+const uploadProfile = require("../middleware/uploadProfile")
 
 const router = express.Router();
 
@@ -9,6 +10,10 @@ router.post("/user/signup", userController.signup);
 router.post("/user/signin", userController.signin);
 
 router.post("/user/verify", userController.verify);
+
+router.get("/user/profile", verifyToken, userController.getUserProfile)
+
+router.post("/user/profile", verifyToken, uploadProfile, userController.createUserProfile)
 
 router.get("/user/community", verifyToken, userController.getUserCommunities);
 

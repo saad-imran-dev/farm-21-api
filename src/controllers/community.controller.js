@@ -55,7 +55,7 @@ class communityController {
 
       const profile = await communityRepo.getProfile(id)
 
-      const url = await (await storage.getUrl(profile.fileName))
+      const url = await storage.getUrl(profile.fileName)
 
       res.status(200).send({ ...community.dataValues, profile: url.publicUrl });
     } catch (error) {

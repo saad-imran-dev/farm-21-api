@@ -38,6 +38,32 @@ class UserRepo {
 
     return user[0].joined_communites;
   }
+
+  async getProfile(id) {
+    const profile = await this.db.attachments.findOne({
+      where: {
+        userId: id
+      }
+    })
+
+    return profile
+  }
+
+  async addProfile(id, fileName, userId) {
+    await this.db.attachments.create({
+      id, 
+      fileName,
+      userId
+    })
+  }
+
+  async deleteProfile(userId) {
+    await this.db.attachments.destroy({
+      where: {
+        userId: userId
+      }
+    })
+  }
 }
 
 const userRepo = new UserRepo();
