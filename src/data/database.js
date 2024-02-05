@@ -97,6 +97,12 @@ class Database {
       onUpdate: "CASCADE",
     });
 
+    // Post community relation
+    this.db.posts.belongsTo(this.db.communities, { as: "community_posts", foreignKey: "communityId", });
+
+    // Post User relation
+    this.db.posts.belongsTo(this.db.users, { as: "user_posts", foreignKey: "userId", });
+
     // User Comments relation
     this.db.users.hasMany(this.db.comments, {
       as: "user_comments",

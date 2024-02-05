@@ -1,0 +1,130 @@
+const { Sequelize } = require("sequelize");
+const database = require("./Database");
+
+class PostRepo {
+    constructor() {
+        this.db = database.getDatabase();
+    }
+
+    async createPost(title, content, userId, communityId) {
+        await this.db.posts.create({
+            title,
+            content,
+            userId,
+            communityId
+        })
+    }
+
+    async getPosts(userId) {
+        const posts = await this.db.posts.findAll({
+            where: {
+                userId: userId
+            },
+            include: {
+                association: "community_posts",
+                attributes: ["id", "name", "desc"]
+            },
+            attributes: ["id", "title", "content"]
+        })
+
+        return posts
+    }
+
+    async getPost(id) {
+        const post = await this.db.posts.findOne({
+            where: {
+                id: id
+            },
+            include: [
+                {
+                    association: "community_posts",
+                    attributes: ["id", "name", "desc"]
+                },
+                {
+                    association: "user_posts",
+                    attributes: ["id", "name"]
+                },
+            ],
+            attributes: ["id", "title", "content"]
+        })
+
+        return post
+    }
+
+    async getInfo(id) {
+        const likes = await this.db.post_liked_by_user.count({
+            where: {
+                postId: id
+            },
+        })
+
+        const comments = await this.db.comments.count({
+            where: {
+                postId: id
+            }
+        })
+
+        return { likes, comments }
+    }
+
+    async deletePost(id, transaction) {
+        await this.db.posts.destroy({
+            where: {
+                id
+            }
+        }, { transaction })
+    }
+
+    async getAttachments(postId) {
+        const attachments = await this.db.attachments.findAll({
+            where: {
+                postId: postId
+            }
+        })
+
+        return attachments
+    }
+
+    async deleteAttachments(postId, transaction) {
+        await this.db.attachments.destroy({
+            where: {
+                postId
+            }
+        }, { transaction })
+    }
+
+    async likePost(postId, userId) {
+        await this.db.post_liked_by_user.create({
+            postId,
+            userId
+        })
+    }
+
+    async dislikePost(postId, userId) {
+        await this.db.post_liked_by_user.destroy({
+            where: {
+                postId,
+                userId
+            }
+        })
+    }
+
+    async isPostLiked(postId, userId) {
+        const post = await this.db.post_liked_by_user.findOne({
+            where: {
+                postId,
+                userId
+            }
+        })
+
+        if (post) {
+            return true
+        } else {
+            return false
+        }
+    }
+}
+
+const postRepo = new PostRepo();
+
+module.exports = postRepo;
