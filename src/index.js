@@ -7,7 +7,7 @@ const database = require("./data/Database");
 const swaggerUi = require("swagger-ui-express");
 const swaggerConfig = require("./config/swagger");
 const exceptionsHandler = require("./Exceptions/exceptionsHandler");
-const UrlNotFoundError = require("./Exceptions/urlNotFoundError");
+const CustomError = require("./Exceptions/customError");
 
 const app = express();
 const port = process.env.PORT;
@@ -33,7 +33,7 @@ console.log(`--> All routes loaded`);
 
 // Global Exception handling
 app.all("*", (req, res, next) => {
-  const err = new UrlNotFoundError(req.originalUrl);
+  const err = new CustomError(`Can't find ${req.originalUrl} on server`, 404);
   next(err);
 });
 

@@ -1,7 +1,7 @@
 const { ValidationError } = require("joi");
 const postRepo = require("../data/post.repo");
 const postValidation = require("../validation/post.validation");
-const storage = require("../supabase/Storage");
+const storage = require("../utils/Storage");
 const { v4 } = require("uuid");
 const database = require("../data/Database");
 

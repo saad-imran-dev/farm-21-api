@@ -1,9 +1,9 @@
-const authentication = require("../supabase/Authentication");
+const authentication = require("../utils/Authentication");
 const userValidation = require("../validation/user.validation");
 const userRepo = require("../data/user.repo");
 const { ValidationError } = require("joi");
 const { AuthApiError } = require("@supabase/supabase-js");
-const storage = require("../supabase/Storage");
+const storage = require("../utils/Storage");
 const { v4 } = require('uuid')
 
 class userController {

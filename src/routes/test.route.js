@@ -2,7 +2,7 @@ const express = require("express");
 const verifyToken = require("../middleware/verifyToken");
 const uploadAttachments = require("../middleware/uploadAttachments");
 const { v4 } = require("uuid");
-const storage = require("../supabase/Storage");
+const storage = require("../utils/Storage");
 const attachmentRepo = require("../data/attachment.repo");
 const database = require("../data/Database");
 
