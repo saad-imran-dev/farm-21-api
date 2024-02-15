@@ -1,5 +1,5 @@
 const { JsonWebTokenError } = require("jsonwebtoken");
-const authentication = require("../supabase/Authentication");
+const authentication = require("../utils/Authentication");
 const UnAuthorizedError = require("../Exceptions/unauthorizedError");
 
 const verifyToken = async (req, res, next) => {

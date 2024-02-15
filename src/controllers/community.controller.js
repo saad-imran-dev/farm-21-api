@@ -1,7 +1,7 @@
 const { ValidationError } = require("joi");
 const communityRepo = require("../data/community.repo");
 const communityValidation = require("../validation/community.validation");
-const storage = require("../supabase/Storage");
+const storage = require("../utils/Storage");
 const { v4 } = require("uuid");
 const UnAuthorizedError = require("../Exceptions/unauthorizedError");
 const NotFoundError = require("../Exceptions/NotFoundError");
