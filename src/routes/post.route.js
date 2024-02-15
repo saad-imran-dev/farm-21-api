@@ -69,7 +69,7 @@ module.exports = router
  * @swagger
  * /api/post:
  *   post:
- *     summary: Create a new post
+ *     summary: Create a new post. To add images, attach images files with feild name 'Attachments'
  *     tags: [Posts]
  *     security:
  *       - bearerAuth: []
@@ -86,6 +86,8 @@ module.exports = router
  *                 type: string
  *               communityId:
  *                 type: string
+ *               Attachments:
+ *                 type: file
  *     responses:
  *       201:
  *         description: Post created successfully
