@@ -11,11 +11,13 @@ router.post("/user/signin", userController.signin);
 
 router.post("/user/verify", userController.verify);
 
-router.get("/user/profile", verifyToken, userController.getUserProfile)
+router.use(verifyToken)
 
-router.post("/user/profile", verifyToken, uploadProfile, userController.createUserProfile)
+router.get("/user/profile", userController.getUserProfile)
 
-router.get("/user/community", verifyToken, userController.getUserCommunities);
+router.post("/user/profile", uploadProfile, userController.createUserProfile)
+
+router.get("/user/community", userController.getUserCommunities);
 
 module.exports = router;
 

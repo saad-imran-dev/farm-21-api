@@ -5,21 +5,23 @@ const uploadProfile = require("../middleware/uploadProfile");
 
 const router = express.Router()
 
-router.post("/community/", verifyToken, communityController.createCommunity);
+router.use(verifyToken)
 
-router.get("/community/", verifyToken, communityController.getCommunities);
+router.post("/community/", communityController.createCommunity);
 
-router.get("/community/:id", verifyToken, communityController.getCommunity);
+router.get("/community/", communityController.getCommunities);
 
-router.patch("/community/:id", verifyToken, communityController.updateCommunity);
+router.get("/community/:id", communityController.getCommunity);
 
-router.delete("/community/:id", verifyToken, communityController.deleteCommunity);
+router.patch("/community/:id", communityController.updateCommunity);
 
-router.post("/community/profile/:id", verifyToken, uploadProfile, communityController.communityProfile)
+router.delete("/community/:id", communityController.deleteCommunity);
 
-router.post("/community/join/:id", verifyToken, communityController.joinCommunity);
+router.post("/community/profile/:id", uploadProfile, communityController.communityProfile)
 
-router.post("/community/leave/:id", verifyToken, communityController.leaveCommunity);
+router.post("/community/join/:id", communityController.joinCommunity);
+
+router.post("/community/leave/:id", communityController.leaveCommunity);
 
 module.exports = router
 

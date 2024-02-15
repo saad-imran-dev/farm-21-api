@@ -5,17 +5,19 @@ const uploadAttachments = require("../middleware/uploadAttachments");
 
 const router = express.Router()
 
-router.get("/post/", verifyToken, postController.getPosts);
+router.use(verifyToken)
 
-router.get("/post/:id", verifyToken, postController.getPost);
+router.get("/post/", postController.getPosts);
 
-router.post("/post/", verifyToken, uploadAttachments, postController.createPost);
+router.get("/post/:id", postController.getPost);
 
-router.delete("/post/:id", verifyToken, postController.deletePost);
+router.post("/post/", uploadAttachments, postController.createPost);
 
-router.post("/post/like/:id", verifyToken, postController.likePost);
+router.delete("/post/:id", postController.deletePost);
 
-router.post("/post/dislike/:id", verifyToken, postController.dislikePost);
+router.post("/post/like/:id", postController.likePost);
+
+router.post("/post/dislike/:id", postController.dislikePost);
 
 module.exports = router
 
