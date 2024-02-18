@@ -1,6 +1,4 @@
-const { JsonWebTokenError } = require("jsonwebtoken");
 const authentication = require("../utils/Authentication");
-const UnAuthorizedError = require("../Exceptions/unauthorizedError");
 
 const verifyToken = async (req, res, next) => {
   const { authorization } = req.headers;

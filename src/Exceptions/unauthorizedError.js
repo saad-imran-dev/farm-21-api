@@ -1,8 +1,8 @@
 const CustomError = require("./customError");
 
 class UnAuthorizedError extends CustomError {
-  constructor(url) {
-    super(`Unauthorized`, 401);
+  constructor(message = "") {
+    super(`Unauthorized. ` + message, 401);
   }
 }
 

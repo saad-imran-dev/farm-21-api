@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const supabase = require("../config/supabase");
-const { AuthApiError } = require("@supabase/supabase-js");
+const UnAuthorizedError = require("../Exceptions/unauthorizedError");
 
 class Authentication {
   constructor() {
@@ -61,7 +61,19 @@ class Authentication {
   }
 
   async verifyUserToken(token) {
-    const jwtToken = await jwt.verify(token, process.env.JWT_SECRET_KEY);
+    let jwtToken;
+    let jwtError;
+
+    try {
+      jwtToken = await jwt.verify(token, process.env.JWT_SECRET_KEY);
+    } catch (error) {
+      jwtError = error;
+    }
+
+    if(jwtError){
+      console.log(jwtError);
+      throw new UnAuthorizedError("Invalid or Malformed JWT.");
+    }
 
     return jwtToken;
   }
