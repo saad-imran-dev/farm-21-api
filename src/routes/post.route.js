@@ -7,17 +7,17 @@ const router = express.Router()
 
 router.use(verifyToken)
 
-router.get("/post/", postController.getPosts);
+router.get("/", postController.getPosts);
 
-router.get("/post/:id", postController.getPost);
+router.get("/:id", postController.getPost);
 
-router.post("/post/", uploadAttachments, postController.createPost);
+router.post("/", uploadAttachments, postController.createPost);
 
-router.delete("/post/:id", postController.deletePost);
+router.delete("/:id", postController.deletePost);
 
-router.post("/post/like/:id", postController.likePost);
+router.post("/like/:id", postController.likePost);
 
-router.post("/post/dislike/:id", postController.dislikePost);
+router.post("/dislike/:id", postController.dislikePost);
 
 module.exports = router
 

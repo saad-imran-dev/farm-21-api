@@ -5,19 +5,19 @@ const uploadProfile = require("../middleware/uploadProfile")
 
 const router = express.Router();
 
-router.post("/user/signup", userController.signup);
+router.post("/signup", userController.signup);
 
-router.post("/user/signin", userController.signin);
+router.post("/signin", userController.signin);
 
-router.post("/user/verify", userController.verify);
+router.post("/verify", userController.verify);
 
 router.use(verifyToken)
 
-router.get("/user/profile", userController.getUserProfile)
+router.get("/profile", userController.getUserProfile)
 
-router.post("/user/profile", uploadProfile, userController.createUserProfile)
+router.post("/profile", uploadProfile, userController.createUserProfile)
 
-router.get("/user/community", userController.getUserCommunities);
+router.get("/community", userController.getUserCommunities);
 
 module.exports = router;
 

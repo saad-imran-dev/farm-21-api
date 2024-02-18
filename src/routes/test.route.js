@@ -26,7 +26,7 @@ const router = express.Router();
  *             example: 'API working.'
  */
 
-router.get("/test/", verifyToken, async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   res.status(200).send("API working");
 });
 
@@ -56,7 +56,7 @@ router.get("/test/", verifyToken, async (req, res) => {
  *         description: Internal Server Error
  */
 router.post(
-  "/test/storage",
+  "/storage",
   verifyToken,
   uploadAttachments,
   async (req, res) => {
@@ -97,11 +97,10 @@ router.post(
  *           application/json:
  *             example: { "attachments": ["url1", "url2"] }
  */
-router.get("/test/storage", verifyToken, async (req, res) => {
+router.get("/storage", verifyToken, async (req, res) => {
   try {
     const url = process.env.STORAGE_PUBLIC_URL;
-    const files = await attachmentRepo.getTestAttachment();
-
+    const files = await attachmentRepo.getTestAttachment()
     let attachments = [];
     for (const file of files) {
       attachments.push(url + file.fileName);
@@ -138,7 +137,7 @@ router.get("/test/storage", verifyToken, async (req, res) => {
  *         description: Files uploaded successfully
  */
 router.put(
-  "/test/storage",
+  "/storage",
   verifyToken,
   uploadAttachments,
   async (req, res) => {
@@ -186,7 +185,7 @@ router.put(
  *       '200':
  *         description: Files deleted
  */
-router.delete("/test/storage", verifyToken, async (req, res) => {
+router.delete("/storage", verifyToken, async (req, res) => {
   try {
     const files = await attachmentRepo.getTestAttachment();
 

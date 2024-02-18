@@ -7,21 +7,21 @@ const router = express.Router()
 
 router.use(verifyToken)
 
-router.post("/community/", communityController.createCommunity);
+router.post("/", communityController.createCommunity);
 
-router.get("/community/", communityController.getCommunities);
+router.get("/", communityController.getCommunities);
 
-router.get("/community/:id", communityController.getCommunity);
+router.get("/:id", communityController.getCommunity);
 
-router.patch("/community/:id", communityController.updateCommunity);
+router.patch("/:id", communityController.updateCommunity);
 
-router.delete("/community/:id", communityController.deleteCommunity);
+router.delete("/:id", communityController.deleteCommunity);
 
-router.post("/community/profile/:id", uploadProfile, communityController.communityProfile)
+router.post("/profile/:id", uploadProfile, communityController.communityProfile)
 
-router.post("/community/join/:id", communityController.joinCommunity);
+router.post("/join/:id", communityController.joinCommunity);
 
-router.post("/community/leave/:id", communityController.leaveCommunity);
+router.post("/leave/:id", communityController.leaveCommunity);
 
 module.exports = router
 

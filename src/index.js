@@ -26,7 +26,8 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerConfig));
 const files = fs.readdirSync("./src/routes");
 
 files.forEach((file) => {
-  app.use("/api", require(`./routes/${file}`));
+  const entityName = file.split(".")[0];
+  app.use(`/api/${entityName}/`, require(`./routes/${file}`));
   console.log(`Succesfully loaded route ${file}`);
 });
 console.log(`--> All routes loaded`);
