@@ -135,6 +135,20 @@ class Database {
       onUpdate: "CASCADE",
     });
 
+    // Comment and Reply relations
+    this.db.comments.hasMany(this.db.comments, {
+      as: "comment_replies",
+      foreignKey: "commentId",
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
+    });
+
+    // Comments User relation
+    this.db.comments.belongsTo(this.db.users, { as: "user_comments", foreignKey: "userId", });
+
+    // Post Comments relation
+    this.db.comments.belongsTo(this.db.posts, { as: "post_comments", foreignKey: "postId", });
+
     // likes M:N relation btw users & posts
     this.db.users.belongsToMany(this.db.posts, {
       as: "likes",

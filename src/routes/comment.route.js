@@ -6,16 +6,14 @@ const router = express.Router()
 
 router.use(verifyToken);
 
-router.get("/", commentController.get)
+router.get("/:postId", commentController.get)
 
-router.post("/", commentController.create)
+router.post("/:postId", commentController.create)
 
 router.delete("/:id", commentController.delete)
 
-router.get("/reply/:id", commentController.getReply)
+router.get("/reply/:commentId", commentController.getReply)
 
-router.post("/reply/:id", commentController.createReply)
-
-router.delete("/reply/:id", commentController.deleteReply)
+router.post("/reply/:commentId", commentController.createReply)
 
 module.exports = router;
