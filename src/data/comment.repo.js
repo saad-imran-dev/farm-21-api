@@ -75,6 +75,45 @@ class CommentRepo {
 
         return comment
     }
+
+    async vote(vote, commentId, userId) {
+        const commentVote = await this.db.comment_votes_by_user.create({
+            commentId,
+            userId,
+            vote
+        })
+
+        return commentVote
+    }
+
+    async getVotes(commentId) {
+        const votePositive = await this.db.comment_votes_by_user.count({
+            where: {
+                commentId,
+                vote: true,
+            }
+        })
+
+        const voteNegative = await this.db.comment_votes_by_user.count({
+            where: {
+                commentId,
+                vote: false,
+            }
+        })
+
+        return votePositive - voteNegative
+    }
+
+    async checkVote(commentId, userId) {
+        const vote = await this.db.comment_votes_by_user.findOne({
+            where: {
+                commentId,
+                userId
+            }
+        })
+
+        return vote?.dataValues?.vote
+    }
 }
 
 const commentRepo = new CommentRepo()

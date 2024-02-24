@@ -1,6 +1,6 @@
 const Joi = require("joi")
 
-createComment = Joi.object({
+create = Joi.object({
     comment: Joi.string().required(),
 })
 
@@ -8,9 +8,14 @@ createReply = Joi.object({
     reply: Joi.string().required(),
 })
 
+vote = Joi.object({
+    vote: Joi.boolean().required(),
+})
+
 commentValidation = {
-    createComment,
+    create,
     createReply,
+    vote
 }
 
 module.exports = commentValidation

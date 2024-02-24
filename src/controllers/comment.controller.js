@@ -16,7 +16,18 @@ class CommentController {
 
         const comments = await commentRepo.get(postId)
 
-        res.send({ comments })
+        const commentWithVotes = await Promise.all(comments.map(async (comment) => {
+            const votes = await commentRepo.getVotes(comment.dataValues.id)
+            const voteGiven = await commentRepo.checkVote(comment.dataValues.id, req.uid)
+
+            return {
+                ...comment.dataValues,
+                votes,
+                voteGiven,
+            }
+        }))
+
+        res.send({ comments: commentWithVotes })
     }
 
     async getReply(req, res) {
@@ -29,7 +40,18 @@ class CommentController {
 
         const replies = await commentRepo.getReply(commentId)
 
-        res.send({ replies })
+        const replyWithVotes = await Promise.all(replies.map(async (reply) => {
+            const votes = await commentRepo.getVotes(reply.dataValues.id)
+            const voteGiven = await commentRepo.checkVote(reply.dataValues.id, req.uid)
+
+            return {
+                ...reply.dataValues,
+                votes,
+                voteGiven,
+            }
+        }))
+
+        res.send({ replies: replyWithVotes })
     }
 
     async create(req, res) {
@@ -37,7 +59,7 @@ class CommentController {
 
         const { postId } = req.params;
         const { comment } = req.body;
-        await validationHandler(req.body, commentValidation.createComment);
+        await validationHandler(req.body, commentValidation.create);
 
         if (!(await postRepo.getPost(postId)))
             throw new NotFoundError()
@@ -71,12 +93,27 @@ class CommentController {
 
         if (!comment)
             throw new NotFoundError()
-        if(comment.dataValues.userId !== req.uid)
+        if (comment.dataValues.userId !== req.uid)
             throw new UnAuthorizedError()
 
         const deleted = await commentRepo.delete(id)
 
         res.send({ deleted })
+    }
+
+    async vote(req, res) {
+        console.log("--> Vote for a comment")
+
+        const { commentId } = req.params
+        const { vote } = req.body
+        await validationHandler(req.body, commentValidation.vote)
+
+        if (!(await commentRepo.getById(commentId)))
+            throw new NotFoundError()
+
+        await commentRepo.vote(vote, commentId, req.uid)
+
+        res.send({ message: "Voted for comment" })
     }
 }
 
