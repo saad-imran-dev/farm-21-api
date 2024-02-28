@@ -5,6 +5,16 @@ class UserRepo {
     this.db = database.getDatabase();
   }
 
+  async get(id) {
+    const user = await this.db.users.findOne({
+      where: {
+        id,
+      }
+    })
+
+    return user
+  }
+
   async getUserWithEmail(email) {
     const user = await this.db.users.findAll({
       where: {
@@ -51,7 +61,7 @@ class UserRepo {
 
   async addProfile(id, fileName, userId) {
     await this.db.attachments.create({
-      id, 
+      id,
       fileName,
       userId
     })

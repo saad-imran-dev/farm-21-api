@@ -13,6 +13,8 @@ router.post("/verify", userController.verify);
 
 router.use(verifyToken)
 
+router.get("/", userController.getUser)
+
 router.get("/profile", userController.getUserProfile)
 
 router.post("/profile", uploadProfile, userController.createUserProfile)
@@ -124,6 +126,21 @@ module.exports = router;
  *         description: User verified successfully
  *       '400':
  *         description: Invalid inputs, token, or authentication error
+ *       '500':
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * /api/user/:
+ *   get:
+ *     summary: Get user details 
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved communities
  *       '500':
  *         description: Internal Server Error
  */

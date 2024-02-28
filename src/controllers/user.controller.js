@@ -87,6 +87,13 @@ class userController {
     }
   }
 
+  static async getUser(req, res) {
+    console.log("--> GET user details")
+
+    const user = await userRepo.get(req.uid)
+    res.status(200).send(user)
+  }
+
   static async getUserCommunities(req, res) {
     console.info("--> GET User Communities");
 
@@ -124,12 +131,12 @@ class userController {
 
     try {
       const profile = await userRepo.getProfile(req.uid)
-      
+
       if (profile) {
         await storage.deleteFile(profile.fileName)
         await userRepo.deleteProfile(req.uid)
       }
-      
+
       const fileId = v4()
       const fileName = fileId + req.file.originalname
       await storage.uploadFile(fileName, req.file.buffer);
