@@ -1,6 +1,7 @@
 const authentication = require("../utils/Authentication");
 const userValidation = require("../validation/user.validation");
 const userRepo = require("../data/user.repo");
+const validationHandler = require("../validation/validationHandler")
 const { ValidationError } = require("joi");
 const { AuthApiError } = require("@supabase/supabase-js");
 const storage = require("../utils/Storage");
@@ -91,45 +92,50 @@ class userController {
     console.log("--> GET user details")
 
     const user = await userRepo.get(req.uid)
-    res.status(200).send(user)
+    const profile = await userRepo.getProfile(req.uid)
+    let url = await storage.getUrl(profile?.fileName)
+
+    if (url.publicUrl.split('/').slice(-1)[0] === "undefined") {
+      url = undefined;
+    }
+
+    res.status(200).send({ ...user.dataValues, profile: url?.publicUrl })
   }
 
   static async getUserCommunities(req, res) {
     console.info("--> GET User Communities");
 
-    try {
-      const communities = await userRepo.getUserCommunities(req.uid);
+    const communities = await userRepo.getUserCommunities(req.uid);
 
-      res.status(200).send({ communities });
-    } catch (error) {
-      res.sendStatus(500);
-      console.error(`Error: ${error}`);
-    }
+    res.status(200).send({ communities });
   }
 
   static async getUserProfile(req, res) {
     console.info("--> GET User Profile");
 
-    try {
-      const profile = await userRepo.getProfile(req.uid)
+    const profile = await userRepo.getProfile(req.uid)
 
-      const url = await storage.getUrl(profile?.fileName)
+    const url = await storage.getUrl(profile?.fileName)
 
-      if (url.publicUrl.split('/').slice(-1)[0] === "undefined") {
-        return res.sendStatus(404)
-      }
-
-      res.status(200).send(url);
-    } catch (error) {
-      res.sendStatus(500);
-      console.error(`Error: ${error}`);
+    if (url.publicUrl.split('/').slice(-1)[0] === "undefined") {
+      return res.sendStatus(404)
     }
+
+    res.status(200).send(url);
   }
 
   static async createUserProfile(req, res) {
     console.info("--> Add User Profile");
 
-    try {
+    const { desc } = req.body
+
+    await validationHandler(req.body, userValidation.profile)
+
+    if (desc) {
+      await userRepo.updateDesc(desc, req.uid)
+    }
+
+    if (req.file) {
       const profile = await userRepo.getProfile(req.uid)
 
       if (profile) {
@@ -142,12 +148,9 @@ class userController {
       await storage.uploadFile(fileName, req.file.buffer);
 
       await userRepo.addProfile(fileId, fileName, req.uid)
-
-      res.sendStatus(200);
-    } catch (error) {
-      res.sendStatus(500);
-      console.error(`Error: ${error}`);
     }
+
+    res.sendStatus(200);
   }
 }
 

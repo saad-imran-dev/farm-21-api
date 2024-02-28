@@ -18,6 +18,11 @@ const User = sequelize.define(table_name, {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    desc: {
+        type: DataTypes.STRING,
+        defaultValue: "",
+        allowNull: false,
+    },
     coins: {
         type: DataTypes.BIGINT,
         defaultValue: 0,
@@ -28,7 +33,7 @@ const User = sequelize.define(table_name, {
         defaultValue: false,
         allowNull: false,
     },
-    
+
 }, {
     timestamps: true,
 });

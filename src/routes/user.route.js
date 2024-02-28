@@ -15,8 +15,6 @@ router.use(verifyToken)
 
 router.get("/", userController.getUser)
 
-router.get("/profile", userController.getUserProfile)
-
 router.post("/profile", uploadProfile, userController.createUserProfile)
 
 router.get("/community", userController.getUserCommunities);
@@ -148,29 +146,32 @@ module.exports = router;
 /**
  * @swagger
  * /api/user/profile/:
- *   get:
- *     summary: Get the url for user profile pic 
- *     tags: [User]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       '200':
- *         description: Successfully retrieved communities
- *       '500':
- *         description: Internal Server Error
- */
-
-/**
- * @swagger
- * /api/user/profile/:
  *   post:
- *     summary: Add profile pic for user. Form data fieldname should be "Profile" 
+ *     summary: Update user profile of user. Form data fieldname should be "Profile" for setting profile pic
  *     tags: [User]
  *     security:
  *       - bearerAuth: []
+ *     consumes:
+ *       - multipart/form-data
+ *     parameters:
+ *       - in: formData
+ *         name: Profile
+ *         schema:
+ *           type: file
+ *         description: The profile pic to upload.
+ *     requestBody:
+ *       description: User verification data
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               desc:
+ *                 type: string
  *     responses:
  *       '200':
- *         description: Successfully retrieved communities
+ *         description: Successfully updated profile
  *       '500':
  *         description: Internal Server Error
  */

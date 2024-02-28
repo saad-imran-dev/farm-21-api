@@ -11,9 +11,14 @@ const verifyOTP = Joi.object({
     token: Joi.string().pattern(/^\d{6}$/).required(),
 })
 
+const profile = Joi.object({
+    desc: Joi.string()
+})
+
 const userValidation = {
     auth,
     verifyOTP,
+    profile,
 }
 
 module.exports = userValidation

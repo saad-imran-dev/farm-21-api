@@ -9,7 +9,8 @@ class UserRepo {
     const user = await this.db.users.findOne({
       where: {
         id,
-      }
+      },
+      attributes: ["name", "email", "desc", "isExpert", "coins", "createdAt"]
     })
 
     return user
@@ -47,6 +48,11 @@ class UserRepo {
     });
 
     return user[0].joined_communites;
+  }
+
+  async updateDesc(desc, id) {
+    const userUpdated = this.db.users.update({ desc }, { where: { id } })
+    return userUpdated
   }
 
   async getProfile(id) {
