@@ -29,7 +29,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /comments/{postId}:
+ * /api/comments/{postId}:
  *   get:
  *     summary: Get comments for a post
  *     tags: [Comment]
@@ -57,7 +57,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /comments/{postId}:
+ * /api/comments/{postId}:
  *   post:
  *     summary: Create a new comment on a post
  *     tags: [Comment]
@@ -87,7 +87,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /comments/{id}:
+ * /api/comments/{id}:
  *   delete:
  *     summary: Delete a comment by ID
  *     tags: [Comment]
@@ -109,7 +109,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /comments/reply/{commentId}:
+ * /api/comments/reply/{commentId}:
  *   get:
  *     summary: Get replies for a comment
  *     tags: [Comment]
@@ -129,7 +129,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /comments/reply/{commentId}:
+ * /api/comments/reply/{commentId}:
  *   post:
  *     summary: Create a reply for a comment
  *     tags: [Comment]
@@ -159,7 +159,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /comments/vote/{commentId}:
+ * /api/comments/vote/{commentId}:
  *   post:
  *     summary: Vote for a comment. Positive vote if true, negative if false.
  *     tags: [Comment]
