@@ -1,7 +1,7 @@
 {
   "name": "farm-21-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "An api for Farm.21 app",
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
