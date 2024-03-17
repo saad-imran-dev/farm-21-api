@@ -1,4 +1,6 @@
+const { Sequelize, QueryTypes } = require("sequelize");
 const database = require("./Database");
+const sequelize = require("../config/sequelize");
 
 class UserRepo {
   constructor() {
@@ -79,6 +81,35 @@ class UserRepo {
         userId: userId
       }
     })
+  }
+
+  async getRank(userId) {
+    const userRankQuery = `select sub."rank" from (
+      select
+        row_number() over() as rank,
+        "userId",
+        sum(
+          case
+            when vote = true then 1
+            else 0
+          end
+        ) - sum(
+          case
+            when vote = false then 1
+            else 0
+          end
+        ) as votes
+      from
+        comment_votes_by_user
+      group by
+        "userId"
+      order by
+        "votes" desc
+    )as sub where sub."userId" = '${userId}'`
+
+    const rank = await sequelize.query(userRankQuery, { type: QueryTypes.SELECT })
+
+    return rank[0]
   }
 }
 
