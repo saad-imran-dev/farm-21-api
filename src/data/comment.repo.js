@@ -21,6 +21,19 @@ class CommentRepo {
         return comments
     }
 
+    async getForUser(userId){
+        const comments = await this.db.comments.findAll({
+            where: {
+                userId
+            },
+            order: [
+                ["createdAt"]
+            ]
+        })
+
+        return comments
+    }
+
     async getById(id) {
         const comment = await this.db.comments.findOne({
             where: {

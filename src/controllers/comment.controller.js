@@ -6,7 +6,26 @@ const NotFoundError = require("../Exceptions/NotFoundError");
 const UnAuthorizedError = require("../Exceptions/unauthorizedError");
 
 class CommentController {
-    async get(req, res) {
+    async get(req, res){
+        console.log("--> GET user comments")
+
+        const comments = await commentRepo.getForUser(req.uid)
+
+        const commentWithVotes = await Promise.all(comments.map(async (comment) => {
+            const votes = await commentRepo.getVotes(comment.dataValues.id)
+            const voteGiven = await commentRepo.checkVote(comment.dataValues.id, req.uid)
+
+            return {
+                ...comment.dataValues,
+                votes,
+                voteGiven,
+            }
+        }))
+
+        res.send({ comments: commentWithVotes })
+    }
+
+    async getForPost(req, res) {
         console.log("--> GET comments for post")
 
         const { postId } = req.params

@@ -6,7 +6,9 @@ const router = express.Router()
 
 router.use(verifyToken);
 
-router.get("/:postId", commentController.get)
+router.get("/", commentController.get)
+
+router.get("/:postId", commentController.getForPost)
 
 router.post("/:postId", commentController.create)
 
@@ -25,6 +27,25 @@ module.exports = router;
  * tags:
  *   name: Comment
  *   description: Operations related to Post comments
+ */
+
+/**
+ * @swagger
+ * /api/comments:
+ *   get:
+ *     summary: Get comments for user
+ *     tags: [Comment]
+ *     responses:
+ *       '200':
+ *         description: Successful response with comments and votes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 comments:
+ *                   type: array
+ *                   description: List of comments with votes
  */
 
 /**

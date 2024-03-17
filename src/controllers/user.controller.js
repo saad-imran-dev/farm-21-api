@@ -110,20 +110,6 @@ class userController {
     res.status(200).send({ communities });
   }
 
-  static async getUserProfile(req, res) {
-    console.info("--> GET User Profile");
-
-    const profile = await userRepo.getProfile(req.uid)
-
-    const url = await storage.getUrl(profile?.fileName)
-
-    if (url.publicUrl.split('/').slice(-1)[0] === "undefined") {
-      return res.sendStatus(404)
-    }
-
-    res.status(200).send(url);
-  }
-
   static async createUserProfile(req, res) {
     console.info("--> Add User Profile");
 
