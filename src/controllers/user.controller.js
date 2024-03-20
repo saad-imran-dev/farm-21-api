@@ -93,14 +93,14 @@ class userController {
 
     const user = await userRepo.get(req.uid)
     const profile = await userRepo.getProfile(req.uid)
-    const rank = await userRepo.getRank(req.uid)
+    let rank = await userRepo.getRank(req.uid)
     let url = await storage.getUrl(profile?.fileName)
 
     if (url.publicUrl.split('/').slice(-1)[0] === "undefined") {
       url = undefined;
     }
 
-    res.status(200).send({ ...user.dataValues, profile: url?.publicUrl, rank: rank.rank })
+    res.status(200).send({ ...user.dataValues, profile: url?.publicUrl, rank: rank?.rank })
   }
 
   static async getUserCommunities(req, res) {
