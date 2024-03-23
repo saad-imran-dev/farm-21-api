@@ -3,7 +3,7 @@ const Joi = require('joi')
 const create = Joi.object({
     name: Joi.string().required(),
     desc: Joi.string().required(),
-    price: Joi.string().required(),
+    price: Joi.number().required(),
 })
 
 const update = create

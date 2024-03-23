@@ -8,7 +8,12 @@ class ProductRepo {
 
     async find() {
         const products = await this.db.products.findAll({
-            order: [["createdAt"]]
+            order: [["createdAt"]],
+            include: {
+                association: "user_products",
+                attributes: ["name", "email"]
+            },
+            attributes: ["id", "name", "desc", "price", "createdAt"]
         })
 
         return products
@@ -16,19 +21,20 @@ class ProductRepo {
 
     async findOne(id) {
         const product = await this.db.products.findOne({
-            where: { id }
+            where: { id },
         })
 
-        if(!product) throw new NotFoundError()
+        if (!product) throw new NotFoundError()
 
         return product
     }
 
-    async create(name, desc, price) {
+    async create(name, desc, price, userId) {
         const product = await this.db.products.create({
             name,
             desc,
             price,
+            userId
         })
 
         return product

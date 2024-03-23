@@ -9,7 +9,7 @@ router.use(verifyToken)
 
 router.get("/", productController.get);
 
-router.get("/:id", productController.getOne);
+// router.get("/:id", productController.getOne);
 
 router.post("/", uploadAttachments, productController.create);
 

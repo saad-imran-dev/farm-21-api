@@ -8,16 +8,16 @@ class ProductController {
         res.json(products)
     }
 
-    async getOne(req, res) {
-        const { id } = req.params
-        const product = await productRepo.findOne(id)
-        res.json(product)
-    }
+    // async getOne(req, res) {
+    //     const { id } = req.params
+    //     const product = await productRepo.findOne(id)
+    //     res.json(product)
+    // }
 
     async create(req, res) {
         await validationHandler(req.body, productValidation.create) // Validation checks for request Body
         const { name, desc, price } = req.body
-        const product = await productRepo.create(name, desc, price)
+        const product = await productRepo.create(name, desc, price, req.uid)
         res.json(product)
     }
 
