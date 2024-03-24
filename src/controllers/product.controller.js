@@ -1,38 +1,38 @@
 const productRepo = require("../data/product.repo")
+const productService = require("../services/product.services")
 const productValidation = require("../validation/product.validation")
 const validationHandler = require("../validation/validationHandler")
 
 class ProductController {
-    async get(req, res) {
-        const products = await productRepo.find()
+    constructor() {
+        this.service = productService
+    }
+
+    get = async (req, res) => {
+        const { search, page, pageSize } = req.query
+        const products = await this.service.get(search, parseInt(page), parseInt(pageSize))
         res.json(products)
     }
 
-    // async getOne(req, res) {
-    //     const { id } = req.params
-    //     const product = await productRepo.findOne(id)
-    //     res.json(product)
-    // }
-
-    async create(req, res) {
+    create = async (req, res) => {
         await validationHandler(req.body, productValidation.create) // Validation checks for request Body
         const { name, desc, price } = req.body
-        const product = await productRepo.create(name, desc, price, req.uid)
+        const product = await this.service.create(name, desc, price, req.uid)
         res.json(product)
     }
 
-    async update(req, res) {
+    update = async (req, res) => {
         await validationHandler(req.body, productValidation.update) // Validation checks for request Body
         const { id } = req.params
         const { name, desc, price } = req.body
-        const product = await productRepo.update(id, name, desc, price)
-        res.json(product)
+        const status = await this.service.update(id, name, desc, price)
+        res.json(status)
     }
 
-    async delete(req, res) {
+    delete = async (req, res) => {
         const { id } = req.params
-        const status = await productRepo.delete(id)
-        res.sendStatus(200)
+        const status = await this.service.delete(id)
+        res.json(status)
     }
 }
 

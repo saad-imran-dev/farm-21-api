@@ -1,22 +1,38 @@
 const database = require("./Database")
 const NotFoundError = require("../Exceptions/NotFoundError")
+const { Op } = require("sequelize")
 
 class ProductRepo {
     constructor() {
         this.db = database.getDatabase()
     }
 
-    async find() {
+    async find(search, limit, offset) {
         const products = await this.db.products.findAll({
+            where: {
+                name: {
+                    [Op.like]: `%${search}%`
+                }
+            },
             order: [["createdAt"]],
             include: {
                 association: "user_products",
                 attributes: ["name", "email"]
             },
-            attributes: ["id", "name", "desc", "price", "createdAt"]
+            attributes: ["id", "name", "desc", "price", "createdAt"],
+            limit,
+            offset,
         })
 
-        return products
+        const count = await this.db.products.count({
+            where: {
+                name: {
+                    [Op.like]: `%${search}%`
+                }
+            },
+        })
+        
+        return { products, pages: limit ? Math.ceil(count / limit) : 1, }
     }
 
     async findOne(id) {
