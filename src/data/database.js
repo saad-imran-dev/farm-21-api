@@ -135,6 +135,9 @@ class Database {
       onUpdate: "CASCADE",
     });
 
+    // Products User relation
+    this.db.products.belongsTo(this.db.users, { as: "user_products", foreignKey: "userId", });
+
     // Comment and Reply relations
     this.db.comments.hasMany(this.db.comments, {
       as: "comment_replies",
