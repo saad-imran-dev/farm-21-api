@@ -10,14 +10,14 @@ class ProductController {
 
     get = async (req, res) => {
         const { search, page, pageSize } = req.query
-        const products = await this.service.get(search, parseInt(page), parseInt(pageSize))
+        const products = await this.service.get(search || "", parseInt(page), parseInt(pageSize))
         res.json(products)
     }
 
     create = async (req, res) => {
         await validationHandler(req.body, productValidation.create) // Validation checks for request Body
         const { name, desc, price } = req.body
-        const product = await this.service.create(name, desc, price, req.uid)
+        const product = await this.service.create(name, desc, price, req.uid, req.files)
         res.json(product)
     }
 
@@ -25,7 +25,7 @@ class ProductController {
         await validationHandler(req.body, productValidation.update) // Validation checks for request Body
         const { id } = req.params
         const { name, desc, price } = req.body
-        const status = await this.service.update(id, name, desc, price)
+        const status = await this.service.update(id, name, desc, price, req.files)
         res.json(status)
     }
 

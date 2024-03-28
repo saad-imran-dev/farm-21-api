@@ -15,10 +15,16 @@ class ProductRepo {
                 }
             },
             order: [["createdAt"]],
-            include: {
-                association: "user_products",
-                attributes: ["name", "email"]
-            },
+            include: [
+                {
+                    association: "user_products",
+                    attributes: ["name", "email"]
+                },
+                {
+                    association: "product_attachments",
+                    attributes: ["fileName"]
+                },
+            ],
             attributes: ["id", "name", "desc", "price", "createdAt"],
             limit,
             offset,
@@ -31,7 +37,7 @@ class ProductRepo {
                 }
             },
         })
-        
+
         return { products, pages: limit ? Math.ceil(count / limit) : 1, }
     }
 
@@ -72,6 +78,29 @@ class ProductRepo {
         return await this.db.products.destroy({
             where: {
                 id
+            }
+        })
+    }
+
+    async getAttachment(productId) {
+        return this.db.attachments.findAll({
+            where: {
+                productId
+            }
+        })
+    }
+
+    async addAttachment(fileName, productId) {
+        return this.db.attachments.create({
+            fileName,
+            productId
+        })
+    }
+
+    async deleteAttachment(productId) {
+        return this.db.attachments.destroy({
+            where: {
+                productId
             }
         })
     }
