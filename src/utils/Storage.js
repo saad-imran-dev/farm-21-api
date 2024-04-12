@@ -12,6 +12,8 @@ class Storage {
   }
 
   async getUrl(fileName) {
+    if (!fileName) return null
+
     const { data, error } = await this.storage
       .from(process.env.STORAGE_BUCKET)
       .getPublicUrl(fileName);
