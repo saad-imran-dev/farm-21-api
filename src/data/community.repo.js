@@ -15,6 +15,27 @@ class CommunityRepo {
     return community;
   }
 
+  async getPosts(id) {
+    const community = await this.db.communities.findOne({
+      where: {
+        id: id
+      },
+      include: [
+        {
+          association: "community_moderator",
+          attributes: ["name", "email"]
+        },
+        {
+          association: "community_posts",
+          attributes: ["id"]
+        }
+      ],
+      attributes: ["id", "name", "desc", "createdAt"]
+    });
+
+    return community;
+  }
+
   async getCommunity() {
     const communities = await this.db.communities.findAll({
       include: {
