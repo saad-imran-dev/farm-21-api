@@ -51,6 +51,16 @@ class communityController {
     res.status(200).send({ ...community.dataValues, profile: url?.publicUrl });
   }
 
+  static async getCommunityPost(req, res) {
+    console.info("--> GET Community");
+
+    const { id } = req.params;
+
+    const posts = await communityRepo.getPosts(id)
+
+    res.send(posts)
+  }
+
   static async updateCommunity(req, res) {
     console.info("--> Update Community");
 

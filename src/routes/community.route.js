@@ -13,6 +13,8 @@ router.get("/", communityController.getCommunities);
 
 router.get("/:id", communityController.getCommunity);
 
+router.get("/post/:id", communityController.getCommunityPost);
+
 router.patch("/:id", communityController.updateCommunity);
 
 router.delete("/:id", communityController.deleteCommunity);
