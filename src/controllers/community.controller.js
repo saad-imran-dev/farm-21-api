@@ -42,7 +42,11 @@ class communityController {
 
     const profile = await communityRepo.getProfile(id);
 
-    const url = await storage.getUrl(profile?.fileName);
+    let url = await storage.getUrl(profile?.fileName)
+
+    if (url.publicUrl.split('/').slice(-1)[0] === "undefined") {
+      url = undefined;
+    }
 
     res.status(200).send({ ...community.dataValues, profile: url?.publicUrl });
   }
