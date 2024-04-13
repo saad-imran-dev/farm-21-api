@@ -102,6 +102,23 @@ module.exports = router
 
 /**
  * @swagger
+ * /api/community/post/{id}:
+ *   get:
+ *     summary: Get community details & all posts
+ *     tags: [Community]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved communities
+ *       '401':
+ *         description: Unauthorized
+ *       '500':
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
  * /api/community/{id}:
  *   patch:
  *     summary: Update a community by ID
