@@ -4,6 +4,7 @@ const postValidation = require("../validation/post.validation");
 const storage = require("../utils/Storage");
 const { v4 } = require("uuid");
 const database = require("../data/Database");
+const communityRepo = require("../data/community.repo");
 
 class postController {
   static async createPost(req, res) {
@@ -80,9 +81,26 @@ class postController {
         })
       );
 
+      const communityProfile = await communityRepo.getProfile(post.dataValues.community_posts.dataValues.id)
+
       const info = await postRepo.getInfo(id);
 
-      res.status(200).send({ ...post.dataValues, ...info, attachments: url });
+      let communityProfileUrl = await storage.getUrl(communityProfile?.fileName)
+
+      if (communityProfileUrl.publicUrl.split('/').slice(-1)[0] === "undefined") {
+        communityProfileUrl = undefined;
+      }
+
+      res.status(200).send({
+        ...info,
+        ...post.dataValues,
+        community_posts: {
+          ...post.dataValues.community_posts.dataValues,
+          profile: communityProfileUrl.publicUrl
+        },
+        attachments: url
+      });
+
     } catch (error) {
       res.sendStatus(500);
       console.error(`Error: ${error.message}`);
