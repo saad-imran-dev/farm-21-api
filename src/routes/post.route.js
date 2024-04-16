@@ -11,6 +11,8 @@ router.get("/", postController.getPosts);
 
 router.get("/:id", postController.getPost);
 
+router.get("/user/:email", postController.getUserPost);
+
 router.post("/", uploadAttachments, postController.createPost);
 
 router.delete("/:id", postController.deletePost);
@@ -63,6 +65,28 @@ module.exports = router
  *         description: Returns the details of the specified post
  *       404:
  *         description: Post not found
+ *       500:
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * /api/post/user/{email}:
+ *   get:
+ *     summary: Get other user posts
+ *     tags: [Posts]
+ *     parameters:
+ *       - in: path
+ *         name: email
+ *         required: true
+ *         description: email of the user
+ *         schema:
+ *           type: string
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Returns an array of user posts
  *       500:
  *         description: Internal Server Error
  */
