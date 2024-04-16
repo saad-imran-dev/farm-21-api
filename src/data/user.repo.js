@@ -12,7 +12,7 @@ class UserRepo {
       where: {
         id,
       },
-      attributes: ["name", "email", "desc", "isExpert", "coins", "createdAt"]
+      attributes: ["id", "name", "email", "desc", "isExpert", "coins", "createdAt"]
     })
 
     return user

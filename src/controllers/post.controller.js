@@ -63,9 +63,9 @@ class postController {
   }
 
   static async getUserPost(req, res) {
-    const { email } = req.params;
+    const { id } = req.params;
 
-    const user = await userRepo.getUserWithEmail(email);
+    const user = await userRepo.get(id);
     if (!user) throw new NotFoundError();
     
     const posts = await postRepo.getPosts(user.dataValues.id);

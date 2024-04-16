@@ -11,7 +11,7 @@ router.get("/", postController.getPosts);
 
 router.get("/:id", postController.getPost);
 
-router.get("/user/:email", postController.getUserPost);
+router.get("/user/:id", postController.getUserPost);
 
 router.post("/", uploadAttachments, postController.createPost);
 
@@ -71,15 +71,15 @@ module.exports = router
 
 /**
  * @swagger
- * /api/post/user/{email}:
+ * /api/post/user/{id}:
  *   get:
  *     summary: Get other user posts
  *     tags: [Posts]
  *     parameters:
  *       - in: path
- *         name: email
+ *         name: id
  *         required: true
- *         description: email of the user
+ *         description: id of the user
  *         schema:
  *           type: string
  *     security:
