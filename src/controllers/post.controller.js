@@ -1,10 +1,12 @@
 const { ValidationError } = require("joi");
 const postRepo = require("../data/post.repo");
+const userRepo = require("../data/user.repo");
 const postValidation = require("../validation/post.validation");
 const storage = require("../utils/Storage");
 const { v4 } = require("uuid");
 const database = require("../data/Database");
 const communityRepo = require("../data/community.repo");
+const NotFoundError = require("../Exceptions/NotFoundError");
 
 class postController {
   static async createPost(req, res) {
@@ -60,6 +62,17 @@ class postController {
     }
   }
 
+  static async getUserPost(req, res) {
+    const { email } = req.params;
+
+    const user = await userRepo.getUserWithEmail(email);
+    if (!user) throw new NotFoundError();
+    
+    const posts = await postRepo.getPosts(user.dataValues.id);
+
+    res.status(200).send(posts);
+  }
+
   static async getPost(req, res) {
     console.info("--> GET a Post");
 
@@ -81,13 +94,19 @@ class postController {
         })
       );
 
-      const communityProfile = await communityRepo.getProfile(post.dataValues.community_posts.dataValues.id)
+      const communityProfile = await communityRepo.getProfile(
+        post.dataValues.community_posts.dataValues.id
+      );
 
       const info = await postRepo.getInfo(id);
 
-      let communityProfileUrl = await storage.getUrl(communityProfile?.fileName)
+      let communityProfileUrl = await storage.getUrl(
+        communityProfile?.fileName
+      );
 
-      if (communityProfileUrl.publicUrl.split('/').slice(-1)[0] === "undefined") {
+      if (
+        communityProfileUrl.publicUrl.split("/").slice(-1)[0] === "undefined"
+      ) {
         communityProfileUrl = undefined;
       }
 
@@ -96,11 +115,10 @@ class postController {
         ...post.dataValues,
         community_posts: {
           ...post.dataValues.community_posts.dataValues,
-          profile: communityProfileUrl.publicUrl
+          profile: communityProfileUrl.publicUrl,
         },
-        attachments: url
+        attachments: url,
       });
-
     } catch (error) {
       res.sendStatus(500);
       console.error(`Error: ${error.message}`);
