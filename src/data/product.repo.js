@@ -11,7 +11,7 @@ class ProductRepo {
         const products = await this.db.products.findAll({
             where: {
                 name: {
-                    [Op.like]: `%${search}%`
+                    [Op.like]: `%${search.toLowerCase()}%`
                 }
             },
             order: [["createdAt"]],
@@ -53,8 +53,8 @@ class ProductRepo {
 
     async create(name, desc, price, userId) {
         const product = await this.db.products.create({
-            name,
-            desc,
+            name: name.toLowerCase(),
+            desc: desc.toLowerCase(),
             price,
             userId
         })
