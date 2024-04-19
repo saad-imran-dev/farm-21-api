@@ -1,3 +1,7 @@
+const multer = require("multer");
+const BadRequestError = require("./badRequestError");
+const CustomError = require("./customError");
+
 const devErrors = (res, error) => {
   res.status(error.statusCode).json({
     status: error.status,
@@ -21,14 +25,27 @@ const prodErrors = (res, error) => {
   }
 };
 
+const handleFileHandlingError = (error) => {
+  if (error instanceof multer.MulterError){
+    if (error.code === "LIMIT_UNEXPECTED_FILE"){
+      return new BadRequestError("Wrong file upload field name. Check swagger documentation and try again")
+    }
+    return new CustomError("Error ocurred while processing file", 500)
+  }
+  
+  return error
+}
+
 const handler = (error, req, res, next) => {
-  error.statusCode = error.statusCode || 500;
-  error.status = error.status || "error";
+  const err = handleFileHandlingError(error)
+
+  err.statusCode = err.statusCode || 500;
+  err.status = err.status || "error";
 
   if (process.env.NODE_ENV == "development") {
-    devErrors(res, error);
+    devErrors(res, err);
   } else {
-    prodErrors(res, error);
+    prodErrors(res, err);
   }
 };
 

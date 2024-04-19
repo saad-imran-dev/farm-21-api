@@ -14,6 +14,9 @@ const port = process.env.PORT;
 
 // middleware
 app.use(cors());
+app.use(express.urlencoded({
+  extended: true
+}));
 app.use(express.json());
 
 // Sync Db & Models
