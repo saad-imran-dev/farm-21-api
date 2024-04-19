@@ -21,7 +21,7 @@ class CommentRepo {
         return comments
     }
 
-    async getForUser(userId){
+    async getForUser(userId) {
         const comments = await this.db.comments.findAll({
             where: {
                 userId
@@ -90,13 +90,18 @@ class CommentRepo {
     }
 
     async vote(vote, commentId, userId) {
-        const commentVote = await this.db.comment_votes_by_user.create({
+        if (await this.db.comment_votes_by_user.findOne({ where: { commentId, userId } })) {
+            return this.db.comment_votes_by_user.update(
+                { vote },
+                { where: { commentId, userId } }
+            )
+        }
+
+        return this.db.comment_votes_by_user.create({
             commentId,
             userId,
             vote
         })
-
-        return commentVote
     }
 
     async getVotes(commentId) {

@@ -112,7 +112,7 @@ class userController {
   }
 
   static async createUserProfile(req, res) {
-    console.info("--> Add User Profile");
+    console.log("--> Add User Profile");
 
     const { desc } = req.body
 
