@@ -80,17 +80,17 @@ class postController {
       const { id } = req.params;
 
       const post = await postRepo.getPost(id);
-
+      
       if (!post) {
         return res.sendStatus(404);
       }
 
       const attachments = await postRepo.getAttachments(id);
-
+      
       const url = await Promise.all(
-        attachments.map(async (attachment) => {
-          const fileUrl = await storage.getUrl(attachment.fileName);
-          return fileUrl.publicUrl;
+        attachments.map(async (attachment) => {   
+          const fileUrl = await storage.getUrl(attachment.dataValues.fileName);
+          return fileUrl?.publicUrl;
         })
       );
 
@@ -108,6 +108,8 @@ class postController {
         communityProfileUrl.publicUrl.split("/").slice(-1)[0] === "undefined"
       ) {
         communityProfileUrl = undefined;
+      } else {
+        communityProfileUrl = communityProfile.publicUrl
       }
 
       res.status(200).send({
@@ -115,7 +117,7 @@ class postController {
         ...post.dataValues,
         community_posts: {
           ...post.dataValues.community_posts.dataValues,
-          profile: communityProfileUrl.publicUrl,
+          profile: communityProfileUrl,
         },
         attachments: url,
       });
