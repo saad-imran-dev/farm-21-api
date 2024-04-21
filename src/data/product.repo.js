@@ -18,7 +18,7 @@ class ProductRepo {
             include: [
                 {
                     association: "user_products",
-                    attributes: ["name", "email"]
+                    attributes: ["id", "name", "email"]
                 },
                 {
                     association: "product_attachments",
