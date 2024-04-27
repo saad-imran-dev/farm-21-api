@@ -22,6 +22,8 @@ class communityController {
 
     const community = await communityRepo.createCommunity(name, desc, req.uid);
 
+    await communityRepo.joinCommunity(req.uid, community.dataValues.id);
+
     res.status(201).send({ community });
   }
 
