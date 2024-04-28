@@ -102,13 +102,13 @@ class postController {
       let communityProfileUrl = await storage.getUrl(
         communityProfile?.fileName
       );
-
+      
       if (
         communityProfileUrl.publicUrl.split("/").slice(-1)[0] === "undefined"
       ) {
         communityProfileUrl = undefined;
       } else {
-        communityProfileUrl = communityProfile.publicUrl
+        communityProfileUrl = communityProfileUrl.publicUrl
       }
 
       res.status(200).send({
