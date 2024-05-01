@@ -67,9 +67,8 @@ class UserRepo {
     return profile
   }
 
-  async addProfile(id, fileName, userId) {
+  async addProfile(fileName, userId) {
     await this.db.attachments.create({
-      id,
       fileName,
       userId
     })
