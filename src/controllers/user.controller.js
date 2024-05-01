@@ -96,7 +96,7 @@ class userController {
     let rank = await userRepo.getRank(req.uid)
     let url = await storage.getUrl(profile?.fileName)
 
-    if (url.publicUrl.split('/').slice(-1)[0] === "undefined") {
+    if (url && url.publicUrl.split('/').slice(-1)[0] === "undefined") {
       url = undefined;
     }
 
@@ -121,7 +121,7 @@ class userController {
     if (desc) {
       await userRepo.updateDesc(desc, req.uid)
     }
-
+    
     if (req.file) {
       const profile = await userRepo.getProfile(req.uid)
 
@@ -130,11 +130,9 @@ class userController {
         await userRepo.deleteProfile(req.uid)
       }
 
-      const fileId = v4()
-      const fileName = fileId + req.file.originalname
+      const fileName = req.uid + "/" + Date.now() + "_" + req.file.originalname
       await storage.uploadFile(fileName, req.file.buffer);
-
-      await userRepo.addProfile(fileId, fileName, req.uid)
+      await userRepo.addProfile(fileName, req.uid)
     }
 
     res.sendStatus(200);
