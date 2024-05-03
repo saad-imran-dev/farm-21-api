@@ -3,7 +3,7 @@ const postRepo = require("../data/post.repo");
 const userRepo = require("../data/user.repo");
 const postValidation = require("../validation/post.validation");
 const storage = require("../utils/Storage");
-const database = require("../data/Database");
+const database = require("../data/database");
 const communityRepo = require("../data/community.repo");
 const NotFoundError = require("../Exceptions/NotFoundError");
 

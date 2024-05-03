@@ -1,4 +1,4 @@
-const database = require("./Database")
+const database = require("./database")
 const NotFoundError = require("../Exceptions/NotFoundError")
 const { Op } = require("sequelize")
 

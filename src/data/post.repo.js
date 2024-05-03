@@ -1,4 +1,4 @@
-const database = require("./Database");
+const database = require("./database");
 
 class PostRepo {
   constructor() {

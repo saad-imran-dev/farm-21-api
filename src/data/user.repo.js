@@ -1,5 +1,5 @@
-const { Sequelize, QueryTypes } = require("sequelize");
-const database = require("./Database");
+const { QueryTypes } = require("sequelize");
+const database = require("./database");
 const sequelize = require("../config/sequelize");
 
 class UserRepo {

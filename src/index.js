@@ -3,7 +3,7 @@ require("express-async-errors")
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
-const database = require("./data/Database");
+const database = require("./data/database");
 const swaggerUi = require("swagger-ui-express");
 const swaggerConfig = require("./config/swagger");
 const exceptionsHandler = require("./Exceptions/exceptionsHandler");

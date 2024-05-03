@@ -202,9 +202,11 @@ class Database {
   }
 
   async sync() {
-    console.log(`--> Syncing database...`);
-    await sequelize.sync({ alter: true });
-    console.log(`--> Database and Models synced`);
+    if (process.env.NODE_ENV !== "production") {
+      console.log(`--> Syncing database...`);
+      await sequelize.sync();
+      console.log(`--> Database and Models synced`);
+    }
   }
 }
 
