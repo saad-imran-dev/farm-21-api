@@ -54,7 +54,7 @@ class postController {
     try {
       const posts = await postRepo.getPosts(req.uid);
 
-      res.status(200).send(posts.dataValues);
+      res.status(200).send(posts);
     } catch (error) {
       res.sendStatus(500);
       console.error(`Error: ${error.message}`);
