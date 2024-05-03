@@ -54,7 +54,7 @@ class postController {
     try {
       const posts = await postRepo.getPosts(req.uid);
 
-      res.status(200).send(posts);
+      res.status(200).send(posts.dataValues);
     } catch (error) {
       res.sendStatus(500);
       console.error(`Error: ${error.message}`);
@@ -66,7 +66,7 @@ class postController {
 
     const user = await userRepo.get(id);
     if (!user) throw new NotFoundError();
-    
+
     const posts = await postRepo.getPosts(user.dataValues.id);
 
     res.status(200).send(posts);
@@ -79,15 +79,15 @@ class postController {
       const { id } = req.params;
 
       const post = await postRepo.getPost(id);
-      
+
       if (!post) {
         return res.sendStatus(404);
       }
 
       const attachments = await postRepo.getAttachments(id);
-      
+
       const url = await Promise.all(
-        attachments.map(async (attachment) => {   
+        attachments.map(async (attachment) => {
           const fileUrl = await storage.getUrl(attachment.dataValues.fileName);
           return fileUrl?.publicUrl;
         })
@@ -102,7 +102,7 @@ class postController {
       let communityProfileUrl = await storage.getUrl(
         communityProfile?.fileName
       );
-      
+
       if (
         communityProfileUrl.publicUrl.split("/").slice(-1)[0] === "undefined"
       ) {
@@ -119,6 +119,7 @@ class postController {
           profile: communityProfileUrl,
         },
         attachments: url,
+        isLiked: await postRepo.isPostLiked(id, req.uid)
       });
     } catch (error) {
       res.sendStatus(500);
