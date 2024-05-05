@@ -4,12 +4,27 @@ const commentRepo = require("../data/comment.repo");
 const postRepo = require("../data/post.repo");
 const NotFoundError = require("../Exceptions/NotFoundError");
 const UnAuthorizedError = require("../Exceptions/unauthorizedError");
+const userRepo = require("../data/user.repo");
+const storage = require("../utils/Storage");
+
+userProfilePic = async (userId) => {
+    const profile = await userRepo.getProfile(userId)
+    const url = await storage.getUrl(profile?.filename)
+    console.log(url, "profile")
+
+    if (url && url.publicUrl.split('/').slice(-1)[0] === "undefined") {
+        return undefined;
+    }
+
+    return url?.publicUrl
+}
 
 class CommentController {
-    async get(req, res){
+    async get(req, res) {
         console.log("--> GET user comments")
 
         const comments = await commentRepo.getForUser(req.uid)
+        const profile = await this.userProfilePic(req.uid)
 
         const commentWithVotes = await Promise.all(comments.map(async (comment) => {
             const votes = await commentRepo.getVotes(comment.dataValues.id)
@@ -19,6 +34,7 @@ class CommentController {
                 ...comment.dataValues,
                 votes,
                 voteGiven,
+                profile
             }
         }))
 
@@ -38,11 +54,18 @@ class CommentController {
         const commentWithVotes = await Promise.all(comments.map(async (comment) => {
             const votes = await commentRepo.getVotes(comment.dataValues.id)
             const voteGiven = await commentRepo.checkVote(comment.dataValues.id, req.uid)
+            const profile = await userRepo.getProfile(comment.dataValues.user_comments.id)
+            let url = undefined;
+
+            if (profile) {
+                url = process.env.STORAGE_PUBLIC_URL + profile.fileName
+            }
 
             return {
                 ...comment.dataValues,
                 votes,
                 voteGiven,
+                profile: url,
             }
         }))
 
@@ -62,11 +85,18 @@ class CommentController {
         const replyWithVotes = await Promise.all(replies.map(async (reply) => {
             const votes = await commentRepo.getVotes(reply.dataValues.id)
             const voteGiven = await commentRepo.checkVote(reply.dataValues.id, req.uid)
+            const profile = await userRepo.getProfile(reply.dataValues.user_comments.id)
+            let url = undefined;
+
+            if (profile) {
+                url = process.env.STORAGE_PUBLIC_URL + profile.fileName
+            }
 
             return {
-                ...reply.dataValues,
+                ...comment.dataValues,
                 votes,
                 voteGiven,
+                profile: url,
             }
         }))
 

@@ -13,7 +13,7 @@ class CommentRepo {
             },
             include: {
                 association: "user_comments",
-                attributes: ["name", "email"]
+                attributes: ["id", "name", "email"]
             },
             attributes: ["id", "comment", "createdAt"]
         })
@@ -51,7 +51,7 @@ class CommentRepo {
             },
             include: {
                 association: "user_comments",
-                attributes: ["name", "email"]
+                attributes: ["id", "name", "email"]
             },
             attributes: ["id", "comment", "createdAt"]
         })
