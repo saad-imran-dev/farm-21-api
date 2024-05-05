@@ -117,23 +117,21 @@ class userController {
     const { desc } = req.body
 
     await validationHandler(req.body, userValidation.profile)
-    console.log("validation done")
 
     if (desc) {
       await userRepo.updateDesc(desc, req.uid)
-      console.log("Desc updated")
     }
 
     if (req.file) {
       const profile = await userRepo.getProfile(req.uid)
-      console.log("got profile")
 
       if (profile) {
         await storage.deleteFile(profile.fileName)
         await userRepo.deleteProfile(req.uid)
         console.log("olf profile deleted")
       }
-
+      
+      console.log(req.file, req.file.originalname, "req file")
       const fileName = req.uid + "/" + Date.now() + "_" + req.file.originalname
       await storage.uploadFile(fileName, req.file.buffer);
       await userRepo.addProfile(fileName, req.uid)

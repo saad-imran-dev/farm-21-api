@@ -109,7 +109,7 @@ class communityController {
       storage.deleteFile(profile.dataValues.fileName);
       communityRepo.deleteProfile(id);
     }
-
+    console.log(req.file, "file")
     const fileId = v4();
     const fileName = fileId + req.file.originalname;
     await storage.uploadFile(fileName, req.file.buffer);
