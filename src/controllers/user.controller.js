@@ -16,9 +16,10 @@ class userController {
       await userValidation.auth.validateAsync(req.body);
 
       const auth = await authentication.signin(email, password);
-
-      const user = await userRepo.getUserWithEmail(auth.user.email);
-
+      
+      const user = await userRepo.get(auth.user.id);
+      console.log(auth.user, user, "user")
+      
       const token = await authentication.createUserToken(user);
 
       res.status(200).send({ token });
