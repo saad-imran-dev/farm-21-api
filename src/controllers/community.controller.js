@@ -24,7 +24,13 @@ class communityController {
 
     await communityRepo.joinCommunity(req.uid, community.dataValues.id);
 
-    res.status(201).send({ community });
+    if (req.file) {
+      const fileName = community.dataValues.id + "/" + Date.now() + "_" + req.file.originalname;
+      await storage.uploadFile(fileName, req.file.buffer);
+      await communityRepo.addProfile(fileName, community.dataValues.id);
+    }
+
+    res.status(201).send(community);
   }
 
   static async getCommunities(req, res) {

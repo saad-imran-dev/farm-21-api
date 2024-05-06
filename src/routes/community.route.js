@@ -7,7 +7,7 @@ const router = express.Router()
 
 router.use(verifyToken)
 
-router.post("/", communityController.createCommunity);
+router.post("/", uploadProfile, communityController.createCommunity);
 
 router.get("/", communityController.getCommunities);
 
