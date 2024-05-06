@@ -22,6 +22,10 @@ const Product = sequelize.define(table_name, {
         type: DataTypes.DECIMAL,
         allowNull: false,
     },
+    phone: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    }
 
 }, {
     timestamps: true,

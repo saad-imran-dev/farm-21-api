@@ -204,7 +204,7 @@ class Database {
   async sync() {
     if (process.env.NODE_ENV !== "production") {
       console.log(`--> Syncing database...`);
-      await sequelize.sync();
+      await sequelize.sync({ alter: true });
       console.log(`--> Database and Models synced`);
     }
   }
