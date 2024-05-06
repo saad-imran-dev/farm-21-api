@@ -11,30 +11,25 @@ class communityController {
     console.info("--> Create Community");
 
     const { name, desc } = req.body;
-    console.log(req.body, "validation")
+
     await communityValidation.create.validateAsync(req.body);
-    
-    console.log("find  with name")
+
     const communityWithName = await communityRepo.getCommunityWithName(name);
-    
-    console.log("409 error check")
+
     if (communityWithName.length > 0) {
       return res.status(409).send("Community Already exists");
     }
-    
-    console.log("create comm")
+
     const community = await communityRepo.createCommunity(name, desc, req.uid);
-    
-    console.log("join comm")
+
     await communityRepo.joinCommunity(req.uid, community.dataValues.id);
-    console.log(req.file, "file ha ahaha pklsdjfn jwe; cfpodsf")
+    console.log(req.file, "file ha ahaha pklsdjfn jwe; cfpodsf gap")
     if (req.file) {
       const fileName = community.dataValues.id + "/" + Date.now() + "_" + req.file.originalname;
       await storage.uploadFile(fileName, req.file.buffer);
       await communityRepo.addProfile(fileName, community.dataValues.id);
     }
-    
-    console.log("res 201")
+
     res.status(201).send(community);
   }
 

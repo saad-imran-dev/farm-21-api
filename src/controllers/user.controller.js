@@ -5,7 +5,6 @@ const validationHandler = require("../validation/validationHandler")
 const { ValidationError } = require("joi");
 const { AuthApiError } = require("@supabase/supabase-js");
 const storage = require("../utils/Storage");
-const { v4 } = require('uuid')
 
 class userController {
   static async signin(req, res) {
@@ -130,7 +129,7 @@ class userController {
         await userRepo.deleteProfile(req.uid)
         console.log("olf profile deleted")
       }
-      
+
       console.log(req.file, req.file.originalname, "req file")
       const fileName = req.uid + "/" + Date.now() + "_" + req.file.originalname
       await storage.uploadFile(fileName, req.file.buffer);
