@@ -109,12 +109,11 @@ class communityController {
       storage.deleteFile(profile.dataValues.fileName);
       communityRepo.deleteProfile(id);
     }
-    console.log(req.file, "file")
-    const fileId = v4();
-    const fileName = fileId + req.file.originalname;
+
+    const fileName = id + "/" + Date.now() + "_" + req.file.originalname;
     await storage.uploadFile(fileName, req.file.buffer);
 
-    await communityRepo.addProfile(fileId, fileName, id);
+    await communityRepo.addProfile(fileName, id);
 
     res.sendStatus(200);
   }

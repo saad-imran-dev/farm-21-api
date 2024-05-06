@@ -10,7 +10,7 @@ class ProductService {
     async uploadFiles(id, files) {
         await Promise.all(
             files.map(async file => {
-                const fileName = `${id}_${file.originalname.replace(' ', '_')}`
+                const fileName = `${id}/${Date.now()}_${file.originalname.replace(' ', '_')}`
                 await this.repo.addAttachment(fileName, id)
                 await this.storage.uploadFile(fileName, file.buffer)
             })

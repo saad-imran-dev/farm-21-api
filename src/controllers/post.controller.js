@@ -28,7 +28,7 @@ class postController {
 
       await Promise.all(
         req.files.map(async (file) => {
-          const fileName = post.id + "/" + Date.now() + "-" + file.originalname;
+          const fileName = post.id + "/" + Date.now() + "_" + file.originalname;
           await storage.uploadFile(fileName, file.buffer);
           await postRepo.createAttachment(fileName, post.id, transaction);
         })
