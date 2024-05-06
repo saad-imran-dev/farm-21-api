@@ -19,13 +19,13 @@ class UserRepo {
   }
 
   async getUserWithEmail(email) {
-    const user = await this.db.users.findAll({
+    const user = await this.db.users.findOne({
       where: {
         email: email,
       },
     });
 
-    return user[0];
+    return user;
   }
 
   async createUser(id, name, email) {

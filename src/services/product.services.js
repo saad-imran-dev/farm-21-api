@@ -29,8 +29,8 @@ class ProductService {
         await this.repo.deleteAttachment(id)
     }
 
-    async create(name, desc, price, userId, files) {
-        const product = await this.repo.create(name, desc, price, userId)
+    async create(name, desc, price, phone, userId, files) {
+        const product = await this.repo.create(name, desc, price, phone, userId)
         await this.uploadFiles(product.id, files)
         return product
     }

@@ -93,7 +93,7 @@ class CommentController {
             }
 
             return {
-                ...comment.dataValues,
+                ...reply.dataValues,
                 votes,
                 voteGiven,
                 profile: url,

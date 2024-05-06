@@ -144,8 +144,9 @@ class CommunityRepo {
     }
   }
 
-  async addProfile(fileName, communityId) {
+  async addProfile(id, fileName, communityId) {
     await this.db.attachments.create({
+      id,
       fileName,
       communityId
     })

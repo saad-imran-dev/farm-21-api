@@ -25,7 +25,7 @@ class ProductRepo {
                     attributes: ["fileName"]
                 },
             ],
-            attributes: ["id", "name", "desc", "price", "createdAt"],
+            attributes: ["id", "name", "desc", "price", "phone", "createdAt"],
             limit,
             offset,
         })
@@ -51,22 +51,24 @@ class ProductRepo {
         return product
     }
 
-    async create(name, desc, price, userId) {
+    async create(name, desc, price, phone, userId) {
         const product = await this.db.products.create({
             name: name.toLowerCase(),
             desc: desc.toLowerCase(),
             price,
-            userId
+            phone,
+            userId,
         })
 
         return product
     }
 
-    async update(id, name, desc, price) {
+    async update(id, name, desc, price, phone) {
         const product = await this.db.products.update({
             name,
             desc,
             price,
+            phone,
         }, {
             where: { id }
         })

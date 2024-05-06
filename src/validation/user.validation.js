@@ -15,10 +15,15 @@ const profile = Joi.object({
     desc: Joi.string()
 })
 
+const resetPassword = Joi.object({
+    password: Joi.string().pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/).required(),
+})
+
 const userValidation = {
     auth,
     verifyOTP,
     profile,
+    resetPassword
 }
 
 module.exports = userValidation

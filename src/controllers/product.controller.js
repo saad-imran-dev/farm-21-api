@@ -15,17 +15,18 @@ class ProductController {
     }
 
     create = async (req, res) => {
+        console.log("--> create product ")
         await validationHandler(req.body, productValidation.create) // Validation checks for request Body
-        const { name, desc, price } = req.body
-        const product = await this.service.create(name, desc, price, req.uid, req.files)
+        const { name, desc, price, phone } = req.body
+        const product = await this.service.create(name, desc, price, phone, req.uid, req.files)
         res.json(product)
     }
 
     update = async (req, res) => {
         await validationHandler(req.body, productValidation.update) // Validation checks for request Body
         const { id } = req.params
-        const { name, desc, price } = req.body
-        const status = await this.service.update(id, name, desc, price, req.files)
+        const { name, desc, price, phone } = req.body
+        const status = await this.service.update(id, name, desc, price, phone, req.files)
         res.json(status)
     }
 
