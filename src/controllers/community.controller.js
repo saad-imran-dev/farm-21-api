@@ -11,7 +11,7 @@ class communityController {
     console.info("--> Create Community");
 
     const { name, desc } = req.body;
-    console.log("validation")
+    console.log(req.body, "validation")
     await communityValidation.create.validateAsync(req.body);
     
     console.log("find  with name")
