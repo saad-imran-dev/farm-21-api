@@ -11,7 +11,9 @@ class ProductService {
         await Promise.all(
             files.map(async file => {
                 const fileName = `${id}/${Date.now()}_${file.originalname.replace(' ', '_')}`
+                console.log("create attachment")
                 await this.repo.addAttachment(fileName, id)
+                console.log("upload file")
                 await this.storage.uploadFile(fileName, file.buffer)
             })
         )
@@ -30,6 +32,7 @@ class ProductService {
     }
 
     async create(name, desc, price, phone, userId, files) {
+        console.log("product created")
         const product = await this.repo.create(name, desc, price, phone, userId)
         await this.uploadFiles(product.id, files)
         return product

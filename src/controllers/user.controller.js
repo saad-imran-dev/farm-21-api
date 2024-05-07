@@ -16,10 +16,10 @@ class userController {
       await userValidation.auth.validateAsync(req.body);
 
       const auth = await authentication.signin(email, password);
-      
+
       const user = await userRepo.get(auth.user.id);
       console.log(auth.user, user, "user")
-      
+
       const token = await authentication.createUserToken(user);
 
       res.status(200).send({ token });
@@ -131,15 +131,17 @@ class userController {
         console.log("olf profile deleted")
       }
 
-      console.log(req.file, req.file.originalname, "req file")
+      console.log(req.file, "req file")
       const fileName = req.uid + "/" + Date.now() + "_" + req.file.originalname
+      console.log("upload new file")
       await storage.uploadFile(fileName, req.file.buffer);
+      console.log("create new attachment")  
       await userRepo.addProfile(fileName, req.uid)
       console.log("new profile updated")
     }
 
+    console.log("Done")
     res.sendStatus(200);
-    console.log("res 200")
   }
 }
 

@@ -23,13 +23,16 @@ class communityController {
     const community = await communityRepo.createCommunity(name, desc, req.uid);
 
     await communityRepo.joinCommunity(req.uid, community.dataValues.id);
-    console.log(req.file, "file ha ahaha pklsdjfn jwe; cfpodsf gap")
+    console.log(req.file, "file")
     if (req.file) {
       const fileName = community.dataValues.id + "/" + Date.now() + "_" + req.file.originalname;
+      console.log("upload file")
       await storage.uploadFile(fileName, req.file.buffer);
+      console.log("create attchment")
       await communityRepo.addProfile(fileName, community.dataValues.id);
     }
 
+    console.log("Done")
     res.status(201).send(community);
   }
 
@@ -112,15 +115,19 @@ class communityController {
     const profile = await communityRepo.getProfile(id);
 
     if (profile) {
+      console.log("Delete old files")
       storage.deleteFile(profile.dataValues.fileName);
+      console.log("Delete old attachment")
       communityRepo.deleteProfile(id);
     }
-
+    
     const fileName = id + "/" + Date.now() + "_" + req.file.originalname;
+    console.log("upload file")
     await storage.uploadFile(fileName, req.file.buffer);
-
+    console.log("create attachment")
     await communityRepo.addProfile(fileName, id);
 
+    console.log("Done")
     res.sendStatus(200);
   }
 

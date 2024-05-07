@@ -11,34 +11,36 @@ class postController {
   static async createPost(req, res) {
     console.info("--> Create Post");
 
-    const transaction = await database.getTransaction();
+    // const transaction = await database.getTransaction();
 
     try {
       const { title, content, communityId } = req.body;
 
       await postValidation.post.validateAsync(req.body);
-
+      console.log(req.body, "body")
       const post = await postRepo.createPost(
         title,
         content,
         req.uid,
-        communityId,
-        transaction
+        communityId
       );
-
+      console.log(req.files, "files")
       await Promise.all(
         req.files.map(async (file) => {
           const fileName = post.id + "/" + Date.now() + "_" + file.originalname;
+          console.log("uploading file")
           await storage.uploadFile(fileName, file.buffer);
-          await postRepo.createAttachment(fileName, post.id, transaction);
+          console.log("creating attachment")
+          await postRepo.createAttachment(fileName, post.id);
         })
       );
 
-      await transaction.commit();
+      // await transaction.commit();
+      console.log("Done")
       res.sendStatus(201);
     } catch (error) {
       console.error(`Error: ${error.message}`);
-      await transaction.rollback();
+      // await transaction.rollback();
 
       if (error instanceof ValidationError) {
         res.status(400).send("Invalid inputs");

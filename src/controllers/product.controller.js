@@ -19,6 +19,7 @@ class ProductController {
         await validationHandler(req.body, productValidation.create) // Validation checks for request Body
         const { name, desc, price, phone } = req.body
         const product = await this.service.create(name, desc, price, phone, req.uid, req.files)
+        console.log("Done")
         res.json(product)
     }
 

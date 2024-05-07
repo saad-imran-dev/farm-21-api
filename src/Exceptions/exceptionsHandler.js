@@ -42,6 +42,8 @@ const handler = (error, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
 
+  console.error(error, "Endpoint fail error")
+
   if (process.env.NODE_ENV == "development") {
     devErrors(res, err);
   } else {
