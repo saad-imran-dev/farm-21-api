@@ -15,6 +15,8 @@ router.use(verifyToken)
 
 router.get("/", userController.getUser)
 
+router.get("/:id", userController.getUserById)
+
 router.post("/profile", uploadProfile, userController.createUserProfile)
 
 router.get("/community", userController.getUserCommunities);
@@ -133,6 +135,21 @@ module.exports = router;
  * /api/user/:
  *   get:
  *     summary: Get user details 
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved communities
+ *       '500':
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * /api/user/{id}:
+ *   get:
+ *     summary: Get user details by id
  *     tags: [User]
  *     security:
  *       - bearerAuth: []

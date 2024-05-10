@@ -5,6 +5,7 @@ const validationHandler = require("../validation/validationHandler")
 const { ValidationError } = require("joi");
 const { AuthApiError } = require("@supabase/supabase-js");
 const storage = require("../utils/Storage");
+const BadRequestError = require("../Exceptions/badRequestError");
 
 class userController {
   static async signin(req, res) {
@@ -103,6 +104,24 @@ class userController {
     res.status(200).send({ ...user.dataValues, profile: url?.publicUrl, rank: rank?.rank })
   }
 
+  static async getUserById(req, res) {
+    console.log("--> GET user details by id")
+
+    const { id } = req.params
+
+    const user = await userRepo.get(id)
+    if (!user) throw new BadRequestError("User doesn't exist")
+    const profile = await userRepo.getProfile(id)
+    let rank = await userRepo.getRank(id)
+    let url = await storage.getUrl(profile?.fileName)
+
+    if (url && url.publicUrl.split('/').slice(-1)[0] === "undefined") {
+      url = undefined;
+    }
+
+    res.status(200).send({ ...user.dataValues, profile: url?.publicUrl, rank: rank?.rank })
+  }
+
   static async getUserCommunities(req, res) {
     console.info("--> GET User Communities");
 
@@ -135,7 +154,7 @@ class userController {
       const fileName = req.uid + "/" + Date.now() + "_" + req.file.originalname
       console.log("upload new file")
       await storage.uploadFile(fileName, req.file.buffer);
-      console.log("create new attachment")  
+      console.log("create new attachment")
       await userRepo.addProfile(fileName, req.uid)
       console.log("new profile updated")
     }
