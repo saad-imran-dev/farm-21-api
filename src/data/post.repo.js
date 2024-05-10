@@ -45,7 +45,7 @@ class PostRepo {
           attributes: ["id", "name"],
         },
       ],
-      attributes: ["id", "title", "content"],
+      attributes: ["id", "title", "content", "createdAt"],
     });
 
     return post;
