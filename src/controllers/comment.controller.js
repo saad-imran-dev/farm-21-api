@@ -6,6 +6,7 @@ const NotFoundError = require("../Exceptions/NotFoundError");
 const UnAuthorizedError = require("../Exceptions/unauthorizedError");
 const userRepo = require("../data/user.repo");
 const storage = require("../utils/Storage");
+const Ranking = require("../utils/Ranking");
 
 userProfilePic = async (userId) => {
     const profile = await userRepo.getProfile(userId)
@@ -20,7 +21,11 @@ userProfilePic = async (userId) => {
 }
 
 class CommentController {
-    async get(req, res) {
+    constructor() {
+        this.ranking = new Ranking()
+    }
+
+    get = async (req, res) => {
         console.log("--> GET user comments")
 
         const comments = await commentRepo.getForUser(req.uid)
@@ -41,7 +46,7 @@ class CommentController {
         res.send({ comments: commentWithVotes })
     }
 
-    async getForPost(req, res) {
+    getForPost = async (req, res) => {
         console.log("--> GET comments for post")
 
         const { postId } = req.params
@@ -69,10 +74,12 @@ class CommentController {
             }
         }))
 
-        res.send({ comments: commentWithVotes })
+        const rankedComments = await this.ranking.comments(commentWithVotes)
+
+        res.send({ comments: rankedComments })
     }
 
-    async getReply(req, res) {
+    getReply = async (req, res) => {
         console.log("--> GET replies for comments")
 
         const { commentId } = req.params
@@ -103,7 +110,7 @@ class CommentController {
         res.send({ replies: replyWithVotes })
     }
 
-    async create(req, res) {
+    create = async (req, res) => {
         console.log("--> Create Comment on post");
 
         const { postId } = req.params;
@@ -118,7 +125,7 @@ class CommentController {
         res.send({ comment: commentCreated, });
     }
 
-    async createReply(req, res) {
+    createReply = async (req, res) => {
         console.log("--> Create Comment on post");
 
         const { commentId } = req.params;
@@ -133,7 +140,7 @@ class CommentController {
         res.send({ reply: replyCreated, });
     }
 
-    async delete(req, res) {
+    delete = async (req, res) => {
         console.log("--> DELETE comment")
 
         const { id } = req.params
@@ -150,7 +157,7 @@ class CommentController {
         res.send({ deleted })
     }
 
-    async vote(req, res) {
+    vote = async (req, res) => {
         console.log("--> Vote for a comment")
 
         const { commentId } = req.params
