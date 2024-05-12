@@ -6,7 +6,7 @@ class Ranking {
         const postTime = new Date(time).getTime()
 
         return Math.sqrt(1 + likes) / (1 + likes + alpha * Math.log(1 + likes)) /
-            (1 + beta * Math.log(1 + (currentTime - postTime)));
+            (1 + beta * Math.log(1 + currentTime - postTime));
     }
 
     async posts(posts) {
@@ -17,22 +17,14 @@ class Ranking {
             }
         })
 
-        const rankedPosts = scoredPosts.sort((a, b) => b.score - a.score)
-
-        return rankedPosts.map(post => ({ ...post }))
-    }
-
-    epochSeconds(date) {
-        const epoch = new Date('1970-01-01');
-        const td = date - epoch;
-        return td / 1000;
+        return scoredPosts.sort((a, b) => b.score - a.score)
     }
 
     commentScore(votes, date) {
-        const s = votes;
-        const order = Math.log10(Math.max(Math.abs(s), 1));
-        const sign = s > 0 ? 1 : (s < 0 ? -1 : 0);
-        const seconds = this.epochSeconds(date) - 1134028003;
+        const postDate = new Date(date).getTime()
+        const order = Math.log10(Math.max(Math.abs(votes), 1));
+        const sign = votes > 0 ? 1 : (votes < 0 ? -1 : 0);
+        const seconds = (postDate / 1000) - 1134028003;
         return (sign * order + seconds / 45000).toFixed(7);
     }
 
@@ -40,13 +32,11 @@ class Ranking {
         const scoredComments = comments.map(comment => {
             return {
                 ...comment,
-                score: this.commentScore(comment.votes, new Date(comment.createdAt))
+                score: this.commentScore(comment.votes, comment.createdAt)
             }
         })
 
-        const rankedComments = scoredComments.sort((a, b) => b.score - a.score)
-
-        return rankedComments.map(comment => ({ ...comment }))
+        return scoredComments.sort((a, b) => b.score - a.score)
     }
 }
 

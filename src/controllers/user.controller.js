@@ -6,9 +6,14 @@ const { ValidationError } = require("joi");
 const { AuthApiError } = require("@supabase/supabase-js");
 const storage = require("../utils/Storage");
 const BadRequestError = require("../Exceptions/badRequestError");
+const TestamonialService = require("../services/testamonial.service");
 
-class userController {
-  static async signin(req, res) {
+class UserController {
+  constructor() {
+    this.testamonialService = new TestamonialService()
+  }
+
+  signin = async (req, res) => {
     console.info("--> Signin User");
 
     try {
@@ -36,7 +41,7 @@ class userController {
     }
   }
 
-  static async signup(req, res) {
+  signup = async (req, res) => {
     console.info("--> Signup User");
 
     try {
@@ -61,7 +66,7 @@ class userController {
     }
   }
 
-  static async verify(req, res) {
+  verify = async (req, res) => {
     console.info("--> Verify User");
 
     try {
@@ -89,7 +94,7 @@ class userController {
     }
   }
 
-  static async getUser(req, res) {
+  getUser = async (req, res) => {
     console.log("--> GET user details")
 
     const user = await userRepo.get(req.uid)
@@ -104,7 +109,7 @@ class userController {
     res.status(200).send({ ...user.dataValues, profile: url?.publicUrl, rank: rank?.rank })
   }
 
-  static async getUserById(req, res) {
+  getUserById = async (req, res) => {
     console.log("--> GET user details by id")
 
     const { id } = req.params
@@ -119,10 +124,15 @@ class userController {
       url = undefined;
     }
 
-    res.status(200).send({ ...user.dataValues, profile: url?.publicUrl, rank: rank?.rank })
+    res.status(200).send({
+      ...user.dataValues,
+      profile: url?.publicUrl,
+      rank: rank?.rank,
+      giveTestamonial: await this.testamonialService.canGiveTestamonial(req.uid, id)
+    })
   }
 
-  static async getUserCommunities(req, res) {
+  getUserCommunities = async (req, res) => {
     console.info("--> GET User Communities");
 
     const communities = await userRepo.getUserCommunities(req.uid);
@@ -130,7 +140,7 @@ class userController {
     res.status(200).send({ communities });
   }
 
-  static async createUserProfile(req, res) {
+  createUserProfile = async (req, res) => {
     console.log("--> Add User Profile");
 
     const { desc } = req.body
@@ -163,5 +173,7 @@ class userController {
     res.sendStatus(200);
   }
 }
+
+const userController = new UserController()
 
 module.exports = userController;
