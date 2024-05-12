@@ -62,6 +62,22 @@ class Database {
       onUpdate: "CASCADE",
     });
 
+    // User Testamonial writer relation
+    this.db.users.hasMany(this.db.testamonials, {
+      as: "testamonial_writer",
+      foreignKey: "writer",
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
+    });
+
+    // User Testamonial receiver relation
+    this.db.users.hasMany(this.db.testamonials, {
+      as: "testamonial_receiver",
+      foreignKey: "receiver",
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
+    });
+
     // Community Posts relation
     this.db.communities.hasMany(this.db.posts, {
       as: "community_posts",
@@ -148,9 +164,15 @@ class Database {
 
     // Comments User relation
     this.db.comments.belongsTo(this.db.users, { as: "user_comments", foreignKey: "userId", });
-
+    
     // Post Comments relation
     this.db.comments.belongsTo(this.db.posts, { as: "post_comments", foreignKey: "postId", });
+    
+    // Testamonial user writer relation
+    this.db.testamonials.belongsTo(this.db.users, { as: "testamonial_writer", foreignKey: "writer", });
+
+    // Testamonial user receiver relation
+    this.db.testamonials.belongsTo(this.db.users, { as: "testamonial_receiver", foreignKey: "receiver", });
 
     // likes M:N relation btw users & posts
     this.db.users.belongsToMany(this.db.posts, {

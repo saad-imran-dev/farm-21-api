@@ -1,5 +1,5 @@
 const productRepo = require("../data/product.repo")
-const productService = require("../services/product.services")
+const productService = require("../services/product.service")
 const productValidation = require("../validation/product.validation")
 const validationHandler = require("../validation/validationHandler")
 
