@@ -13,13 +13,13 @@ router.post("/verify", userController.verify);
 
 router.use(verifyToken)
 
-router.get("/", userController.getUser)
-
-router.get("/:id", userController.getUserById)
-
 router.post("/profile", uploadProfile, userController.createUserProfile)
 
+router.get("/", userController.getUser)
+
 router.get("/community", userController.getUserCommunities);
+
+router.get("/:id", userController.getUserById)
 
 module.exports = router;
 
