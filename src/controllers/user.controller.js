@@ -7,6 +7,7 @@ const { AuthApiError } = require("@supabase/supabase-js");
 const storage = require("../utils/Storage");
 const BadRequestError = require("../Exceptions/badRequestError");
 const TestamonialService = require("../services/testamonial.service");
+const supabase = require("../config/supabase");
 
 class UserController {
   constructor() {
@@ -39,6 +40,24 @@ class UserController {
       }
       console.error(`Error: ${error}`);
     }
+  }
+
+  googleSignin = async (req, res) => {
+    const { userInfo } = req.body
+    console.log(userInfo)
+    if (userInfo.idToken) {
+      const { data, error } = await supabase.auth.signInWithIdToken({
+        provider: 'google',
+        token: userInfo.idToken,
+      })
+      console.log(error, data)
+    } else {
+      throw new Error('no ID token present!')
+    }
+
+    console.log(data)
+
+    res.send("Done")
   }
 
   signup = async (req, res) => {
