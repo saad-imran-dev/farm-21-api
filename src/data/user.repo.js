@@ -18,6 +18,10 @@ class UserRepo {
     return user
   }
 
+  async numUsers(){
+    return await this.db.users.count()
+  }
+
   async getUserWithEmail(email) {
     const user = await this.db.users.findOne({
       where: {

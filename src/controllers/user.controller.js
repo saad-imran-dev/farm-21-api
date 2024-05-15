@@ -8,10 +8,12 @@ const storage = require("../utils/Storage");
 const BadRequestError = require("../Exceptions/badRequestError");
 const TestamonialService = require("../services/testamonial.service");
 const supabase = require("../config/supabase");
+const UserService = require("../services/user.service");
 
 class UserController {
   constructor() {
     this.testamonialService = new TestamonialService()
+    this.service = new UserService()
   }
 
   signin = async (req, res) => {
@@ -42,23 +44,23 @@ class UserController {
     }
   }
 
-  googleSignin = async (req, res) => {
-    const { userInfo } = req.body
-    console.log(userInfo)
-    if (userInfo.idToken) {
-      const { data, error } = await supabase.auth.signInWithIdToken({
-        provider: 'google',
-        token: userInfo.idToken,
-      })
-      console.log(error, data)
-    } else {
-      throw new Error('no ID token present!')
-    }
+  // googleSignin = async (req, res) => {
+  //   const { userInfo } = req.body
+  //   console.log(userInfo)
+  //   if (userInfo.idToken) {
+  //     const { data, error } = await supabase.auth.signInWithIdToken({
+  //       provider: 'google',
+  //       token: userInfo.idToken,
+  //     })
+  //     console.log(error, data)
+  //   } else {
+  //     throw new Error('no ID token present!')
+  //   }
 
-    console.log(data)
+  //   console.log(data)
 
-    res.send("Done")
-  }
+  //   res.send("Done")
+  // }
 
   signup = async (req, res) => {
     console.info("--> Signup User");
@@ -120,12 +122,13 @@ class UserController {
     const profile = await userRepo.getProfile(req.uid)
     let rank = await userRepo.getRank(req.uid)
     let url = await storage.getUrl(profile?.fileName)
+    const isExpert = await this.service.isExpert(req.uid)
 
     if (url && url.publicUrl.split('/').slice(-1)[0] === "undefined") {
       url = undefined;
     }
 
-    res.status(200).send({ ...user.dataValues, profile: url?.publicUrl, rank: rank?.rank })
+    res.status(200).send({ ...user.dataValues, profile: url?.publicUrl, rank: rank?.rank, isExpert })
   }
 
   getUserById = async (req, res) => {
@@ -138,6 +141,7 @@ class UserController {
     const profile = await userRepo.getProfile(id)
     let rank = await userRepo.getRank(id)
     let url = await storage.getUrl(profile?.fileName)
+    const isExpert = await this.service.isExpert(id)
 
     if (url && url.publicUrl.split('/').slice(-1)[0] === "undefined") {
       url = undefined;
@@ -145,6 +149,7 @@ class UserController {
 
     res.status(200).send({
       ...user.dataValues,
+      isExpert,
       profile: url?.publicUrl,
       rank: rank?.rank,
       giveTestamonial: await this.testamonialService.canGiveTestamonial(req.uid, id)

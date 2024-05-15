@@ -9,7 +9,7 @@ router.post("/signup", userController.signup);
 
 router.post("/signin", userController.signin);
 
-router.post("/signin/oauth", userController.googleSignin);
+// router.post("/signin/oauth", userController.googleSignin);
 
 router.post("/verify", userController.verify);
 
